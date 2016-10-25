@@ -18,18 +18,15 @@
 		</property>
 	</bean>
 
-    <bean class="com.betterjr.common.utils.PropertiesHolder">
-        <property name="properties" value="wechat-web-config.properties" />
-    </bean>
+	<bean class="com.betterjr.common.utils.PropertiesHolder">
+		<property name="properties" value="wechat-web-config.properties" />
+	</bean>
 
 	<bean class="com.betterjr.common.service.SpringContextHolder" />
 	<import resource="wechat-dubbo-consumer.xml" />
 
 	<!-- 扫描spring注解 -->
-	<context:component-scan
-		base-package="
-		com.betterjr.modules.mod1;
-		com.betterjr.modules.mod2">
+	<context:component-scan base-package="com.betterjr.modules.sys.security">
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
@@ -52,36 +49,48 @@
 
 	<bean id="defaultJedisPool" class="redis.clients.jedis.JedisPool">
 		<constructor-arg index="0" ref="jedisPoolConfig" />
-		<constructor-arg index="1" value="${redis.address}" type="String" />
+		<constructor-arg index="1" value="${redis.address}"
+			type="String" />
 		<constructor-arg index="2" value="${redis.port}" type="int" />
 		<!-- connect timeout, sotimeout -->
 		<constructor-arg index="3" value="2000" type="int" />
 		<!-- password -->
-		<constructor-arg index="4" type="String" ><null/></constructor-arg>
+		<constructor-arg index="4" type="String">
+			<null />
+		</constructor-arg>
 		<!-- database index -->
-		<constructor-arg index="5" value="${redis.default.index}" type="int" />
+		<constructor-arg index="5" value="${redis.default.index}"
+			type="int" />
 		<!-- client name -->
-		<constructor-arg index="6" type="String" ><null/></constructor-arg>
+		<constructor-arg index="6" type="String">
+			<null />
+		</constructor-arg>
 	</bean>
-	
+
 	<bean id="shiroJedisPool" class="redis.clients.jedis.JedisPool">
 		<constructor-arg index="0" ref="jedisPoolConfig" />
-		<constructor-arg index="1" value="${redis.address}" type="String" />
+		<constructor-arg index="1" value="${redis.address}"
+			type="String" />
 		<constructor-arg index="2" value="${redis.port}" type="int" />
 		<!-- connect timeout, sotimeout -->
 		<constructor-arg index="3" value="2000" type="int" />
 		<!-- password -->
-		<constructor-arg index="4" type="String" ><null/></constructor-arg>
+		<constructor-arg index="4" type="String">
+			<null />
+		</constructor-arg>
 		<!-- database index -->
-		<constructor-arg index="5" value="${redis.shiro.index}" type="int" />
+		<constructor-arg index="5" value="${redis.shiro.index}"
+			type="int" />
 		<!-- client name -->
-		<constructor-arg index="6" type="String" ><null/></constructor-arg>
+		<constructor-arg index="6" type="String">
+			<null />
+		</constructor-arg>
 	</bean>
 
 	<bean id="shiroRedisManager" class="com.betterjr.common.security.shiro.cache.RedisManager">
 		<property name="jedisPool" ref="shiroJedisPool" />
 		<!-- 设置过期时间shiro cache keys， 默认1个小时 -->
-		<property name="expire" value="3600"/>
+		<property name="expire" value="3600" />
 	</bean>
 
 	<import resource="spring-context-shiro.xml" />
