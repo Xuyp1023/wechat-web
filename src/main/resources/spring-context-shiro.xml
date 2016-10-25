@@ -17,6 +17,7 @@
 			<map>
 				<entry key="logout" value-ref="logoutFilter" />
 				<entry key="authcx" value-ref="captchaFormAuthenticationFilter" />
+				<entry key="authWechat" value-ref="wechatAuthenticationFilter" />
 			</map>
 		</property>
 		<property name="filterChainDefinitions">
@@ -25,7 +26,9 @@
 		<property name="securityManager" ref="securityManager" />
 	</bean>
 
-
+	  <bean id="wechatAuthenticationFilter" class="com.betterjr.modules.sys.security.WechatAuthenticationFilter" >
+	   <property name="failureUrl" value="/tickloginFail" />
+	  </bean>
 	<bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
 		<property name="redirectUrl" value="/static/index.html" />
 	</bean>
@@ -36,8 +39,10 @@
 	<bean name="shiroFilterChainDefinitions" class="java.lang.String">
 		<constructor-arg>
 			<value>
-				/forAgency/** = anon
 				/static/** = anon
+				/forCustomer/** =anon
+				/Wechat/wxRequest/** =anon
+				/WechatOauth2/** = authWechat
 				/login = authcx
 				/logout = logout
 				/p/** =anon
@@ -54,7 +59,7 @@
 	</bean>
 
 	<bean id="systemAuthorizingRealm"
-		class="com.betterjr.modules.sys.security.SystemAuthorizingRealm" />
+		class="com.betterjr.modules.sys.security.WechatAuthorizingRealm" />
 
 	<!-- 自定义会话管理配置 -->
 	<bean id="sessionManager"
