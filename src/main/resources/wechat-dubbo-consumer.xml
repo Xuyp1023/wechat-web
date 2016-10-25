@@ -21,8 +21,14 @@
 
 
 	<!-- 扫描dubbo注解 -->
-	<dubbo:annotation
-		package="com.betterjr.modules.mod1,
-		com.betterjr.dubbo.extend.filter.mod2" />
+	   <!-- 扫描dubbo注解 -->
+    <dubbo:annotation
+        package="com.betterjr.modules.account.dubboclient,
+        com.betterjr.modules.cert.dubboclient,
+        com.betterjr.modules.sys.dubboclient,
+        com.betterjr.modules.operator.dubboclient,
+        com.betterjr.modules.role.dubboclient,
+        com.betterjr.modules.wechat.dubboclient,
+        com.betterjr.dubbo.extend.filter.user" />
 
 </beans>

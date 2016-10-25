@@ -15,8 +15,7 @@
 	<import resource="wechat-dubbo-consumer-springmvc.xml" />
 
 
-	<context:component-scan base-package="com.betterjr.modules.mod1;
-	com.betterjr.modules.sys.mod2"
+	<context:component-scan base-package="com.betterjr.modules.sys.controller;com.betterjr.modules.wechat;"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />

@@ -10,7 +10,7 @@
 	</context-param>
 	<context-param>
 		<param-name>authorizingRealm</param-name>
-		<param-value>systemAuthorizingRealm</param-value>
+		<param-value>wechatAuthorizingRealm</param-value>
 	</context-param>
 	<context-param>
 		<param-name>jsParamFileName</param-name>

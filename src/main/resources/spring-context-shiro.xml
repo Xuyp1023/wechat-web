@@ -53,12 +53,12 @@
 
 	<!-- 定义Shiro安全管理配置 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-		<property name="realm" ref="systemAuthorizingRealm" />
+		<property name="realm" ref="wechatAuthorizingRealm" />
 		<property name="sessionManager" ref="sessionManager" />
 		<property name="cacheManager" ref="shiroCacheManager" />
 	</bean>
 
-	<bean id="systemAuthorizingRealm"
+	<bean id="wechatAuthorizingRealm"
 		class="com.betterjr.modules.sys.security.WechatAuthorizingRealm" />
 
 	<!-- 自定义会话管理配置 -->
