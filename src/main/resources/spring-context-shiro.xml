@@ -42,7 +42,7 @@
 				/static/** = anon
 				/forCustomer/** =anon
 				/Wechat/wxRequest/** =anon
-				/WechatOauth2/** = authWechat
+				/wechatOauth2/** = authWechat
 				/login = authcx
 				/logout = logout
 				/p/** =anon
