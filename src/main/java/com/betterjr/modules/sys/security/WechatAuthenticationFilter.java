@@ -1,14 +1,13 @@
 package com.betterjr.modules.sys.security;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
@@ -30,17 +29,27 @@ public class WechatAuthenticationFilter extends BaseFormAuthenticationFilter {
     private static final String TICKET_PARAMETER = "code";
 
     private String failureUrl;
-    private static final Map<String, String> urlMap = createURLMap();
 
-    private static Map createURLMap(){
-        final Map<String, String> data = new HashMap();
-        data.put("1", "/scf/app/account/register.html?state=1");
-        data.put("2", "/scf/app/account/register.html?state=2");
-        data.put("3", "/scf/app/account/register.html?state=3");
-        data.put("4", "/scf/app/account/register.html?state=4");
-        data.put("5", "/scf/app/account/register.html?state=5");
-        data.put("6", "/scf/app/account/register.html?state=6");
-        return data;
+    @Override
+    protected boolean preHandle(final ServletRequest anRequest, final ServletResponse anResponse) throws Exception {
+        final ShiroUser shiroUser = UserUtils.getPrincipal();
+        logger.info("wechat --- preHandle -- user:" + (shiroUser == null ? "null" : shiroUser.getUserType()));
+        return super.preHandle(anRequest, anResponse);
+    }
+
+    @Override
+    protected void postHandle(final ServletRequest anRequest, final ServletResponse anResponse) throws Exception {
+        super.postHandle(anRequest, anResponse);
+        final ShiroUser shiroUser = UserUtils.getPrincipal();
+        logger.info("wechat --- postHandle -- user:" + (shiroUser == null ? "null" : shiroUser.getUserType()));
+    }
+
+    @Override
+    public void doFilterInternal(final ServletRequest anRequest, final ServletResponse anResponse, final FilterChain anChain)
+            throws ServletException, IOException {
+        super.doFilterInternal(anRequest, anResponse, anChain);
+        final ShiroUser shiroUser = UserUtils.getPrincipal();
+        logger.info("wechat --- doFilterInternal -- user:" + (shiroUser == null ? "null" : shiroUser.getUserType()));
     }
 
     @Override
@@ -59,7 +68,7 @@ public class WechatAuthenticationFilter extends BaseFormAuthenticationFilter {
         final String username = SignHelper.randomBase64(20);
         final String password = "1X2Y3W4o5m6";
 
-        final BetterjrWechatToken token = new BetterjrWechatToken(ticket, username, password, tmpIp );
+        final BetterjrWechatToken token = new BetterjrWechatToken(ticket, username, password, tmpIp);
 
         return token;
     }
@@ -78,7 +87,8 @@ public class WechatAuthenticationFilter extends BaseFormAuthenticationFilter {
     }
 
     @Override
-    protected boolean onLoginFailure(final AuthenticationToken token, final AuthenticationException ae, final ServletRequest request, final ServletResponse response) {
+    protected boolean onLoginFailure(final AuthenticationToken token, final AuthenticationException ae, final ServletRequest request,
+            final ServletResponse response) {
 
         final Subject subject = getSubject(request, response);
         if (subject.isAuthenticated() || subject.isRemembered()) {
@@ -104,24 +114,10 @@ public class WechatAuthenticationFilter extends BaseFormAuthenticationFilter {
         this.failureUrl = failureUrl;
     }
 
-    public static String findWorkUrl(final String anKey){
-
-        return urlMap.get(anKey);
-    }
-
     @Override
     protected void issueSuccessRedirect(final ServletRequest request, final ServletResponse response) throws Exception {
         String tmpKey = request.getParameter("state");
-        if (StringUtils.isBlank(tmpKey)){
-            tmpKey = getSuccessUrl();
-        }
-        else{
-            tmpKey = urlMap.get(tmpKey);
-            if (StringUtils.isBlank(tmpKey)){
-                tmpKey = getSuccessUrl();
-            }
-        }
-
+        tmpKey = getSuccessUrl();
         // 检查当前用户
         final CustWeChatDubboClientService wechatClientService = SpringContextHolder.getBean(CustWeChatDubboClientService.class);
         final CustOperatorInfo operator = UserUtils.getOperatorInfo();
@@ -129,12 +125,12 @@ public class WechatAuthenticationFilter extends BaseFormAuthenticationFilter {
             tmpKey = "/static/wechat/frist.html";
         }
 
-
         WebUtils.redirectToSavedRequest(request, response, tmpKey);
     }
 
     @Override
-    protected boolean onLoginSuccess(final AuthenticationToken token, final Subject subject, final ServletRequest request, final ServletResponse response) throws Exception {
+    protected boolean onLoginSuccess(final AuthenticationToken token, final Subject subject, final ServletRequest request,
+            final ServletResponse response) throws Exception {
         System.out.println("this onLoginSuccess");
         System.out.println(subject);
         super.onLoginSuccess(token, subject, request, response);

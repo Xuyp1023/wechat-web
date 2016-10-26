@@ -40,13 +40,18 @@
 		<constructor-arg>
 			<value>
 				/static/** = anon
+                /resources/** = anon
+                /img/** =anon
+                /l/** =anon
+                /m/** =anon
+                /images/** = anon
 				/forCustomer/** =anon
-				/Wechat/wxRequest/** =anon
+				/Wechat/wxRequest/** =user,roles[NORM_USER]
 				/wechatOauth2/** = authWechat
 				/login = authcx
 				/logout = logout
 				/p/** =anon
-				/** = user
+				/** = user,roles[NORM_USER]
 			</value>
 		</constructor-arg>
 	</bean>
