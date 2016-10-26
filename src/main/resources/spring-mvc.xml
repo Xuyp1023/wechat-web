@@ -18,7 +18,8 @@
 	<context:component-scan base-package="com.betterjr.modules.sys.controller;
 	                       com.betterjr.modules.wechat.controller;
 	                       com.betterjr.modules.invoice;
-	                       com.betterjr.modules.acceptbill;"
+	                       com.betterjr.modules.acceptbill;
+	                       com.betterjr.modules.agreement;"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
