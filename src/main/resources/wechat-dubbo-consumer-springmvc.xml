@@ -11,7 +11,7 @@
 
 	<!-- 扫描dubbo注解 -->
 	<dubbo:annotation package="
-	com.betterjr.modules.mod1,
-	com.betterjr.modules.mod2" />
+	com.betterjr.modules.acceptbill,
+	com.betterjr.modules.invoice" />
 
 </beans>

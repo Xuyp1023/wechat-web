@@ -14,11 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.betterjr.common.data.UserType;
-import com.betterjr.common.utils.UserUtils;
 import com.betterjr.common.web.AjaxObject;
 import com.betterjr.common.web.Servlets;
-import com.betterjr.modules.sys.security.ShiroUser;
 import com.betterjr.modules.wechat.data.api.AccessToken;
 import com.betterjr.modules.wechat.dubboclient.CustWeChatDubboClientService;
 import com.betterjr.modules.wechat.util.WechatDefHandler;
@@ -48,7 +45,7 @@ public class WechatWebController {
      * 与微信服务器互动
      *
      * @param req
-     *            微信服务器请求
+     *            微信服务器请求9
      * @param resp
      *            响应微信服务器
      * @throws IOException
@@ -108,9 +105,9 @@ public class WechatWebController {
         }
     }
 
-    /*    *//**
+    /**
      * 上传文件资料
-     *//*
+     */
     @RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
     public @ResponseBody String fileUpload(final String fileTypeName, final String fileMediaId) {
         try {
@@ -126,15 +123,15 @@ public class WechatWebController {
 
     }
 
-      *//**
-      * 文件资料下载
-      *
-      * @param id
-      *            ；文件编号
-      * @param response
-      * @return
-      *//*
-    @RequestMapping(value = "/fileDownload")
+    /**
+     * 文件资料下载
+     *
+     * @param id
+     *            ；文件编号
+     * @param response
+     * @return
+     */
+    /*@RequestMapping(value = "/fileDownload")
     public @ResponseBody void fileDownload(final Long id, final HttpServletResponse response) {
         try {
             final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
@@ -157,7 +154,7 @@ public class WechatWebController {
             final String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + wechatUrl + "/wechatOauth2&response_type=code&scope=snsapi_base&state=10,6#wechat_redirect";
             resp.sendRedirect(url);
         }
-    }*/
+    }
 
     @RequestMapping(value = "/checkUser", method = { RequestMethod.POST, RequestMethod.GET })
     public @ResponseBody String checkUser(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
@@ -168,5 +165,5 @@ public class WechatWebController {
             }
         }
         return AjaxObject.newOk("检查成功", 0).toJson();
-    }
+    }*/
 }
