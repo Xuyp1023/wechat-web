@@ -1,4 +1,4 @@
-package com.betterjr.modules.sys.controller;
+package com.betterjr.modules.agreement;
 
 import java.util.Map;
 
