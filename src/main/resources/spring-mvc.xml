@@ -19,6 +19,7 @@
 	                       com.betterjr.modules.wechat.controller;
 	                       com.betterjr.modules.invoice;
 	                       com.betterjr.modules.acceptbill;
+	                       com.betterjr.modules.customer;
 	                       com.betterjr.modules.agreement;"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
