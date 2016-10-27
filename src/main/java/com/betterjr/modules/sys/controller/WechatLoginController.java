@@ -57,7 +57,10 @@ public class WechatLoginController {
                         return;
                     } else {
                         final String state = request.getParameter("state");
-                        final String url = UrlDispatcher.dispatch(state);
+                        String url = UrlDispatcher.dispatch(state);
+                        if (state.equals("10,1") == true) {
+                            url = "./wechat/index.html#/register/detail";
+                        }
                         logger.info("正常用户，进入相应页面!" + url);
                         response.sendRedirect(url);
                         return;
@@ -66,6 +69,6 @@ public class WechatLoginController {
             }
         }
 
-        response.sendRedirect("wechat/error.html");
+        response.sendRedirect("wechat/403.html");
     }
 }
