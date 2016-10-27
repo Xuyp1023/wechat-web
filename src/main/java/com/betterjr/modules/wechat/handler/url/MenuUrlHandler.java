@@ -45,22 +45,22 @@ public class MenuUrlHandler implements UrlHandler {
             if (params.size() == 1) {
                 switch (params.get(0)) {
                 case MENU_REGISTER:
-                    anUrlControl.setUrl("../../wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/register");
+                    anUrlControl.setUrl("./wechat/index.html#/register");
                     break;
                 case MENU_ACCOUNT:
-                    anUrlControl.setUrl("./wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/register/detail");
+                    anUrlControl.setUrl("./wechat/index.html#/register/detail");
                     break;
                 case MENU_BILL:
-                    anUrlControl.setUrl("./wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/bill");
+                    anUrlControl.setUrl("./wechat/index.html#/bill");
                     break;
                 case MENU_PRODUCT:
-                    anUrlControl.setUrl("./wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/product");
+                    anUrlControl.setUrl("./wechat/index.html#/product");
                     break;
                 case MENU_FINANCE:
-                    anUrlControl.setUrl("./wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/finance");
+                    anUrlControl.setUrl("./wechat/index.html#/finance");
                     break;
                 case MENU_HOME:
-                    anUrlControl.setUrl("./wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/home");
+                    anUrlControl.setUrl("./wechat/index.html#/home");
                     break;
                 }
             }

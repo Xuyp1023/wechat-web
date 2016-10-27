@@ -9,7 +9,7 @@
 	<description>Shiro Configuration</description>
 
 	<!-- 安全认证过滤器 -->
-	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean" depends-on="rolesOrFilter">
 		<property name="loginUrl" value="/login" />
 		<property name="successUrl" value="/static/main.html" />
 		<property name="unauthorizedUrl" value="/static/error.html" />
@@ -18,6 +18,7 @@
 				<entry key="logout" value-ref="logoutFilter" />
 				<entry key="authcx" value-ref="captchaFormAuthenticationFilter" />
 				<entry key="authWechat" value-ref="wechatAuthenticationFilter" />
+				<entry key="rolesOr" value-ref="rolesOrFilter"/>  
 			</map>
 		</property>
 		<property name="filterChainDefinitions">
@@ -34,7 +35,10 @@
 	</bean>
 	<bean id="captchaFormAuthenticationFilter"
 		class="com.betterjr.modules.sys.security.CaptchaFormAuthenticationFilter" />
-
+		
+    <!-- 自定义的过滤器，用来判断当前用户是否是rolesOr["comm,test"]中的某个角色 -->  
+    <bean id="rolesOrFilter" class="com.betterjr.modules.sys.security.RolesOrAuthorizationFilter" /> 
+    
 	<!-- Shiro权限过滤过滤器定义 -->
 	<bean name="shiroFilterChainDefinitions" class="java.lang.String">
 		<constructor-arg>
@@ -44,14 +48,13 @@
                 /img/** =anon
                 /l/** =anon
                 /m/** =anon
-                /images/** = anon
+                /images/** =anon
 				/forCustomer/** =anon
-				/Wechat/wxRequest/** =user,roles[NORM_USER]
-				/wechatOauth2/** = authWechat
-				/login = authcx
-				/logout = logout
+				/Wechat/wxRequest/** =anon
+				/wechatOauth2/** =authWechat
 				/p/** =anon
-				/** = user,roles[NORM_USER]
+				/Wechat/Platform/** =user,rolesOr[NONE_USER,NORM_USER]
+				/** =user,roles[NORM_USER]
 			</value>
 		</constructor-arg>
 	</bean>

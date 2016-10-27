@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.dubbo.config.annotation.Reference;
 
 @Controller
-@RequestMapping("/Wechat/Platform/Relation")
+@RequestMapping("/Wechat/CustRelation")
 public class WechatCustRelationController {
 
     private static final Logger logger = LoggerFactory.getLogger(WechatCustRelationController.class);

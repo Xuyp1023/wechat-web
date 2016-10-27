@@ -42,14 +42,14 @@ public class RequestUrlHandler implements UrlHandler {
 
         if (BetterStringUtils.equals(func, REQUEST_FUNC_CODE)) {
             final List<String> params = anUrlControl.getParam(UrlControl.FUNC_PARAMS);
-            final String requestNo = params.get(0);
+            final String requestNo = params.get(0);// ?JSESSIONID=" + subject.getSession().getId() + "
             //final ScfRequest request = requestService.findByRequestNo(requestNo);
             final Subject subject = SecurityUtils.getSubject();
             if (null != null) {
-                anUrlControl.setUrl("./wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/finance/detail/finance/" + params.get(0));
+                anUrlControl.setUrl("./wechat/index.html#/finance/detail/finance/" + params.get(0));
             }
             else {
-                anUrlControl.setUrl("./wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/finance");
+                anUrlControl.setUrl("./wechat/index.html#/finance");
             }
         }
 
