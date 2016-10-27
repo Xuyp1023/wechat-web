@@ -1,5 +1,7 @@
 package com.betterjr.modules.sys.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,6 +19,7 @@ import com.betterjr.common.web.Servlets;
 import com.betterjr.modules.account.entity.CustOperatorInfo;
 import com.betterjr.modules.sys.security.ShiroUser;
 import com.betterjr.modules.wechat.data.api.AccessToken;
+import com.betterjr.modules.wechat.dispatcher.UrlDispatcher;
 import com.betterjr.modules.wechat.dubboclient.CustWeChatDubboClientService;
 
 @Controller
@@ -26,40 +29,43 @@ public class WechatLoginController {
 
     /**
      * 管理登录
+     * @throws IOException
      */
     @RequestMapping(value = "/wechatOauth2", method = { RequestMethod.GET, RequestMethod.POST })
-    public String author2Login(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
-        final ShiroUser principal = UserUtils.getPrincipal();
+    public void author2Login(final HttpServletRequest request, final HttpServletResponse response, final Model model) throws IOException {
 
-        // 检查当前用户
-        final CustWeChatDubboClientService wechatClientService = SpringContextHolder.getBean(CustWeChatDubboClientService.class);
         final ShiroUser shiroUser = UserUtils.getPrincipal();
+        if (shiroUser != null) { // 这种情况表明登陆正常
+            // 检查当前用户
+            final CustWeChatDubboClientService wechatClientService = SpringContextHolder.getBean(CustWeChatDubboClientService.class);
 
-        if (shiroUser.getUserType().equals(UserType.NONE_USER)) {
-            logger.info("匿名用户登陆，去到开户页!");
-            final AccessToken at = principal.getData();
+            final AccessToken at = shiroUser.getParam("accessToken");
             if (at != null) {
                 Servlets.getSession().setAttribute("wechat_openId", at.getOpenId());
             }
-            return "redirect:wechat/index.html#/register";
-        }
-        else {
-            final CustOperatorInfo operator = UserUtils.getOperatorInfo();
-            if (wechatClientService.checkFristLogin(operator.getId())) {
-                return "redirect:wechat/index.html#/main";
+            if (shiroUser.getUserType().equals(UserType.NONE_USER)) {
+                logger.info("匿名用户登陆，去到开户页!");
+                response.sendRedirect("wechat/index.html#/register");
+                return;
             }
-
-            // 如果已经登录，则跳转到管理首页
-            if (principal != null && principal.isMobileLogin()) {
-                final String state = request.getParameter("state");
-                // logger.info("request state is :" + state);
-                //
-                logger.info("登陆，，并且是 移动端登陆");
-                return "redirect:wechat/index.html#/main";
+            else {
+                final CustOperatorInfo operator = UserUtils.getOperatorInfo();
+                if (operator != null) {
+                    if (wechatClientService.checkFristLogin(operator.getId())) {
+                        logger.info("首次登陆，去到验证交易密码页!");
+                        response.sendRedirect("wechat/index.html#/accountBind");
+                        return;
+                    } else {
+                        final String state = request.getParameter("state");
+                        final String url = UrlDispatcher.dispatch(state);
+                        logger.info("正常用户，进入相应页面!" + url);
+                        response.sendRedirect(url);
+                        return;
+                    }
+                }
             }
-            return "error";
-
         }
 
+        response.sendRedirect("wechat/error.html");
     }
 }

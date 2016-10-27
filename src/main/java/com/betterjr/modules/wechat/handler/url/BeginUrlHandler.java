@@ -33,7 +33,7 @@ public class BeginUrlHandler implements UrlHandler {
     public void handle(final String anState, final UrlControl anUrlControl) throws Exception {
         if (BetterStringUtils.isBlank(anState)) {
             final Subject subject = SecurityUtils.getSubject();
-            anUrlControl.setUrl("./wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/home");
+            anUrlControl.setUrl("./wechat/index.html#/home");
             return;
         }
 

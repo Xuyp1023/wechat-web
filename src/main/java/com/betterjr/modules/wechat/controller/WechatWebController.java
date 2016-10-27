@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.betterjr.common.data.UserType;
+import com.betterjr.common.utils.UserUtils;
 import com.betterjr.common.web.AjaxObject;
 import com.betterjr.common.web.Servlets;
-import com.betterjr.modules.wechat.data.api.AccessToken;
+import com.betterjr.modules.account.entity.CustOperatorInfo;
+import com.betterjr.modules.sys.security.ShiroUser;
 import com.betterjr.modules.wechat.dubboclient.CustWeChatDubboClientService;
 import com.betterjr.modules.wechat.util.WechatDefHandler;
 import com.betterjr.modules.wechat.util.WechatKernel;
@@ -37,7 +40,6 @@ public class WechatWebController {
 
     protected WechatKernel initKernel(final Map<String, String> anMap) {
         final WechatKernel wk = new WechatKernel(wechatDubboService.getMpAccount(), new WechatDefHandler(wechatDubboService), anMap);
-
         return wk;
     }
 
@@ -68,6 +70,24 @@ public class WechatWebController {
     }
 
     /**
+     * 检查用户
+     */
+    @RequestMapping(value = "/checkUser", method = { RequestMethod.POST, RequestMethod.GET })
+    public @ResponseBody String checkUser(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
+        final ShiroUser shiroUser = UserUtils.getPrincipal();
+        if (shiroUser != null) {
+            final CustOperatorInfo operator = UserUtils.getOperatorInfo();
+            if (UserType.NONE_USER.equals(shiroUser.getUserType()) == true) {
+                return AjaxObject.newOk("检查成功", 2).toJson();
+            } else if (operator != null){
+                return AjaxObject.newOk("检查成功", 1).toJson();
+            }
+        }
+        return AjaxObject.newOk("检查成功", 0).toJson();
+    }
+
+
+    /**
      * 与微信服务器互动
      *
      * @param req
@@ -76,94 +96,42 @@ public class WechatWebController {
      *            响应微信服务器
      * @throws IOException
      */
-    @RequestMapping(value = "/oauth2", method = { RequestMethod.POST, RequestMethod.GET })
+    /*@RequestMapping(value = "/oauth2", method = { RequestMethod.POST, RequestMethod.GET })
     public void wxOauth2(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
         final Map<String, String> map = Servlets.getParameters(req);
         final WechatKernel wk = initKernel(map);
         for (final Map.Entry<String, String> ent : map.entrySet()) {
-            logger.info("this is oauth2 values " + ent.getKey() + " = " + ent.getValue());
+            logger.debug("this is oauth2 values " + ent.getKey() + " = " + ent.getValue());
         }
         final AccessToken at = wk.findUserAuth2(map.get("code"));
-        logger.info("wxOauth2 AccessToken"+at);
-        resp.sendRedirect("http://atest.qiejf.com/better/p/pages/login.html");
-    }
+        logger.debug("wxOauth2 AccessToken" + at);
 
-    /**
-     * 获取JSTicket Signature
-     */
-    @RequestMapping(value = "/getJSSignature", method = RequestMethod.POST)
-    public @ResponseBody String getJSSignature(final String url) {
-        try {
-            final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
-            if (openIdObj != null) {
-                return AjaxObject.newOk("获取JSTicket Signature成功", wechatDubboService.getJSSignature(url)).toJson();
+        if (BetterStringUtils.isNotBlank(at.getOpenId())) {
+            Servlets.getSession().setAttribute("wechat_openId", at.getOpenId());
+
+            final String state = req.getParameter("state");
+            String url = UrlDispatcher.dispatch(state);
+            final CustWeChatInfo wechatUser = wechatDubboService.findWechatUserByOpenId(at.getOpenId());
+            if (wechatUser != null) {
+                final Long operId = wechatUser.getOperId();
+                if (operId != null) {
+                    if (BetterStringUtils.equals(state, "10,1")) {
+                        final String appId = wechatDubboService.getAppId();
+                        final String wechatUrl = wechatDubboService.getWechatUrl();
+                        url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + wechatUrl + "/wechatOauth2&response_type=code&scope=snsapi_base&state=10,2#wechat_redirect";
+                    }
+                }
             }
-            return AjaxObject.newError("获取JSTicket Signature失败").toJson();
-        }
-        catch (final Exception e) {
-            return AjaxObject.newError("获取JSTicket Signature失败").toJson();
-        }
-    }
-
-    /**
-     * 上传文件资料
-     */
-    @RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
-    public @ResponseBody String fileUpload(final String fileTypeName, final String fileMediaId) {
-        try {
-            final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
-            if (openIdObj != null) {
-                return AjaxObject.newOk("保存附件成功", wechatDubboService.fileUpload(fileTypeName, fileMediaId)).toJson();
+            else { // 登记此微信用户
+                final Follower follower = wechatDubboService.findFollower(at.getOpenId());
+                if (follower != null) {
+                    wechatDubboService.saveNewWeChatInfo(at.getOpenId(), at.getOpenId(), follower.getSubscribe());
+                }
             }
-            return AjaxObject.newError("保存附件失败").toJson();
-        }
-        catch (final Exception e) {
-            return AjaxObject.newError("保存附件失败").toJson();
-        }
-
-    }
-
-    /**
-     * 文件资料下载
-     *
-     * @param id
-     *            ；文件编号
-     * @param response
-     * @return
-     */
-    /*@RequestMapping(value = "/fileDownload")
-    public @ResponseBody void fileDownload(final Long id, final HttpServletResponse response) {
-        try {
-            final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
-            if (openIdObj != null) {
-                final CustFileItem fileItem = fileItemService.findOne(id);
-                CustFileClientUtils.fileDownload(response, fileItem);
-            }
-        }
-        catch (final Exception e) {
-            logger.error("下载文件失败，请检查");
-        }
-    }
-
-    @RequestMapping(value = "/toHome", method = { RequestMethod.POST, RequestMethod.GET })
-    public void toHome(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
-        final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
-        final String appId = wechatDubboService.getAppId();
-        final String wechatUrl = wechatDubboService.getWechatUrl();
-        if (openIdObj != null) {
-            final String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + wechatUrl + "/wechatOauth2&response_type=code&scope=snsapi_base&state=10,6#wechat_redirect";
             resp.sendRedirect(url);
         }
-    }
-
-    @RequestMapping(value = "/checkUser", method = { RequestMethod.POST, RequestMethod.GET })
-    public @ResponseBody String checkUser(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
-        final ShiroUser shiroUser = UserUtils.getPrincipal();
-        if (shiroUser != null) {
-            if (shiroUser.getUserType() != UserType.NONE_USER) {
-                return AjaxObject.newOk("检查成功", 1).toJson();
-            }
+        else {
+            resp.sendRedirect("/error.html");
         }
-        return AjaxObject.newOk("检查成功", 0).toJson();
     }*/
 }

@@ -50,13 +50,13 @@ public class BillUrlHandler implements UrlHandler {
                     // final ScfAcceptBill acceptBill = billService.getAcceptBill(billId);
 
                     if (BetterStringUtils.equals(/*acceptBill.getFinanceFlag()*/"0", "0")) {
-                        anUrlControl.setUrl("./wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/bill/detail/" + params.get(0));
+                        anUrlControl.setUrl("./wechat/index.html#/bill/detail/" + params.get(0));
                     }
                     else {
-                        anUrlControl.setUrl("./wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/finance/detail/bill/" + params.get(0));
+                        anUrlControl.setUrl("./wechat/index.html#/finance/detail/bill/" + params.get(0));
                     }
                 } catch (final Exception e) {
-                    anUrlControl.setUrl("./wechat/index.html?JSESSIONID=" + subject.getSession().getId() + "#/bill");
+                    anUrlControl.setUrl("./wechat/index.html#/bill");
                 }
             }
         }

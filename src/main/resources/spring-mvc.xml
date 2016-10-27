@@ -21,7 +21,9 @@
 	                       com.betterjr.modules.acceptbill;
 	                       com.betterjr.modules.customer;
 	                       com.betterjr.modules.product;
-	                       com.betterjr.modules.agreement;"
+	                       com.betterjr.modules.agreement;
+	                       com.betterjr.modules.enquiry;
+                           com.betterjr.modules.loan;"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
