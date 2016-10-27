@@ -37,7 +37,7 @@ public class WechatCustEnrollController {
                 final Map anMap = Servlets.getParametersStartingWith(request, "");
                 logger.info("微信端客户开户,入参:" + anMap.toString());
                 final String openId = String.valueOf(openIdObj);
-                return AjaxObject.newOk("开户成功", weChatCustEnrollDubboService.webAddCustEnroll(anMap, openId, fileList)).toJson();
+                return weChatCustEnrollDubboService.webAddCustEnroll(anMap, openId, fileList);
             }
             return AjaxObject.newError("开户失败").toJson();
         }
@@ -49,7 +49,7 @@ public class WechatCustEnrollController {
     @RequestMapping(value = "/findEnroll", method = RequestMethod.POST)
     public @ResponseBody String findCustEnroll() {
         try {
-            return AjaxObject.newOk("获取开户信息成功", weChatCustEnrollDubboService.webFindCustEnroll()).toJson();
+            return weChatCustEnrollDubboService.webFindCustEnroll();
         }
         catch (final Exception e) {
             return AjaxObject.newError("获取开户信息失败").toJson();

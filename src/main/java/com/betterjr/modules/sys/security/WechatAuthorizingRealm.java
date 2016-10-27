@@ -150,7 +150,7 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
 
                         UserType ut = UserType.ORG_USER;
                         // 如果是默认操作员，则是管理员
-                        if (user.getDefOper()) {
+                        if (user.getDefOper() != null && user.getDefOper()) {
                             ut = UserType.OPERATOR_ADMIN;
                         }
 
