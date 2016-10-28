@@ -234,7 +234,7 @@ public class WechatEnquiryController {
         
     }
     
-    @RequestMapping(value = "/custDropEnquiry", method = RequestMethod.POST)
+   /* @RequestMapping(value = "/custDropEnquiry", method = RequestMethod.POST)
     public @ResponseBody String custDropEnquiry(HttpServletRequest request, Long offerId, String dropReason, String description) {
         Map<String, Object> map = Servlets.getParametersStartingWith(request, "");
         logger.debug("询价方-放弃资金方提供的报价:"+ map);
@@ -245,7 +245,7 @@ public class WechatEnquiryController {
             }
         }, "询价方-放弃资金方提供的报价", logger);
         
-    }
+    }*/
     
     @RequestMapping(value = "/factorDropOffer", method = RequestMethod.POST)
     public @ResponseBody String factorDropOffer(HttpServletRequest request, String enquiryNo, Long factorNo) {
@@ -261,13 +261,13 @@ public class WechatEnquiryController {
     }
     
     @RequestMapping(value = "/custDropOffer", method = RequestMethod.POST)
-    public @ResponseBody String custDropFactorOffer(HttpServletRequest request, String enquiryNo, Long offerId) {
+    public @ResponseBody String custDropFactorOffer(HttpServletRequest request, Long enquiryNo, Long offerId, String dropReason, String description) {
         Map<String, Object> map = Servlets.getParametersStartingWith(request, "");
         logger.debug("询价企业放弃 某个保理公司的报价,参数:"+ map);
         
         return ControllerExceptionHandler.exec(new ExceptionHandler() {
             public String handle() {
-                return enquiryService.webCustDropOffer(enquiryNo, offerId);
+                return enquiryService.webCustDropOffer(enquiryNo, offerId, dropReason, description);
             }
         }, "放弃报价", logger);
         
