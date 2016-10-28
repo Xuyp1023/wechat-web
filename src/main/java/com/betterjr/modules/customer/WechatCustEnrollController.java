@@ -49,7 +49,12 @@ public class WechatCustEnrollController {
     @RequestMapping(value = "/findEnroll", method = RequestMethod.POST)
     public @ResponseBody String findCustEnroll() {
         try {
-            return weChatCustEnrollDubboService.webFindCustEnroll();
+            final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
+            if (openIdObj != null) {
+                final String openId = String.valueOf(openIdObj);
+                return weChatCustEnrollDubboService.webFindCustEnroll(openId);
+            }
+            return AjaxObject.newError("获取开户信息失败").toJson();
         }
         catch (final Exception e) {
             return AjaxObject.newError("获取开户信息失败").toJson();
