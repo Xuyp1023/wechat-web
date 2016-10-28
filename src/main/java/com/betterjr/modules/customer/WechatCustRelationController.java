@@ -28,7 +28,7 @@ public class WechatCustRelationController {
     }
 
     @RequestMapping(value = "/saveRelation", method = RequestMethod.POST)
-    public @ResponseBody String saveRelation(Long custNo, String factorList) {
+    public @ResponseBody String saveRelation(final Long custNo, final String factorList) {
         logger.info("微信端开通保理融资业务申请,入参: " + custNo + " and " + factorList);
 
         return exec(() -> custRelationService.webSaveCustRelation(custNo, factorList), "微信端开通保理融资业务申请失败", logger);
@@ -39,6 +39,13 @@ public class WechatCustRelationController {
         logger.info("客户与保理机构关系查询");
 
         return exec(() -> custRelationService.webQueryFactorRelation(), "客户与保理机构关系查询失败", logger);
+    }
+
+    @RequestMapping(value = "/queryOpendFactor", method = RequestMethod.POST)
+    public @ResponseBody String queryOpendFactorList(final Long custNo) {
+        logger.info("客户与保理机构关系查询");
+
+        return exec(() -> custRelationService.webQueryOpenedFactor(custNo), "客户与保理机构关系查询失败", logger);
     }
 
 }
