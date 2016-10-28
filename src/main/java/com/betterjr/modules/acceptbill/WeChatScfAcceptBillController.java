@@ -110,4 +110,13 @@ public class WeChatScfAcceptBillController {
             }
         }, "汇票详情", logger);
     }
+    
+    @RequestMapping(value = "/saveSingleFileLink", method = RequestMethod.POST)
+    public @ResponseBody String saveSingleFileLink(Long id, Long fileId) {
+        return ControllerExceptionHandler.exec(new ExceptionHandler() {
+            public String handle() {
+                return scfAcceptBillService.webSaveSingleFileLink(id, fileId);
+            }
+        }, "保存附件", logger);
+    }
 }
