@@ -28,6 +28,7 @@ public class MenuUrlHandler implements UrlHandler {
     private static final String MENU_PRODUCT = "4";
     private static final String MENU_FINANCE = "5";
     private static final String MENU_HOME = "6";
+    private static final String MENU_FACTOR = "9";
 
     /*
      * (non-Javadoc)
@@ -61,6 +62,9 @@ public class MenuUrlHandler implements UrlHandler {
                     break;
                 case MENU_HOME:
                     anUrlControl.setUrl("./wechat/index.html#/home");
+                    break;
+                case MENU_FACTOR:
+                    anUrlControl.setUrl("./wechat/index.html#/register/factor");
                     break;
                 }
             }
