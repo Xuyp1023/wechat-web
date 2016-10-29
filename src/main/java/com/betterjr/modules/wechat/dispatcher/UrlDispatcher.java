@@ -13,8 +13,10 @@ import java.util.List;
 import com.betterjr.modules.wechat.handler.url.BeginUrlHandler;
 import com.betterjr.modules.wechat.handler.url.BillUrlHandler;
 import com.betterjr.modules.wechat.handler.url.EndUrlHandler;
+import com.betterjr.modules.wechat.handler.url.InquiryUrlHandler;
 import com.betterjr.modules.wechat.handler.url.MenuUrlHandler;
 import com.betterjr.modules.wechat.handler.url.RequestUrlHandler;
+import com.betterjr.modules.wechat.handler.url.SignUrlHandler;
 import com.betterjr.modules.wechat.handler.url.UrlHandler;
 
 /**
@@ -31,6 +33,8 @@ public final class UrlDispatcher {
         SYS_HANDLER.add(new MenuUrlHandler());  // 处理菜单
         SYS_HANDLER.add(new BillUrlHandler());  // 处理票据
         SYS_HANDLER.add(new RequestUrlHandler());   // 处理融资申请
+        SYS_HANDLER.add(new InquiryUrlHandler());   // 处理报价申请
+        SYS_HANDLER.add(new SignUrlHandler());   // 处理报价申请
 
         SYS_HANDLER.add(new EndUrlHandler());
     }
