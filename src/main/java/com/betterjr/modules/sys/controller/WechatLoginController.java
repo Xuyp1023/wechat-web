@@ -58,7 +58,7 @@ public class WechatLoginController {
                     } else {
                         final String state = request.getParameter("state");
                         String url = UrlDispatcher.dispatch(state);
-                        if (state.equals("10,1") == true) {
+                        if (state != null && state.equals("10,1") == true) {
                             url = "./wechat/index.html#/register/detail";
                         }
                         logger.info("正常用户，进入相应页面!" + url);
