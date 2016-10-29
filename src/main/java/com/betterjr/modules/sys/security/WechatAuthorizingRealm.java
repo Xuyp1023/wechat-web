@@ -99,7 +99,7 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
                 final BetterjrWechatToken wechatToken = (BetterjrWechatToken) authcToken;
                 final WechatKernel wk = new WechatKernel(wechatService.getMpAccount(), new WechatDefHandler(wechatService), new HashMap<>());
 
-                final AccessToken at = wk.findUserAuth2(wechatToken.getTicket());
+                final AccessToken at = findAccessToken(wk, wechatToken);
                 saltStr = "985a44369b063938a6a7";
                 passWD = "8438d772e1eac7d8e57aecaae5fb0b8c2e369283cbe31857d89dc87430160a2b";
                 mobileLogin = true;
@@ -176,6 +176,23 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
     }
 
     /**
+     * @param anWk
+     * @return
+     */
+    private AccessToken findAccessToken(final WechatKernel anWk, final BetterjrWechatToken anWechatToken) {
+        final String sysMode = wechatService.getSysMode();
+        AccessToken at = null;
+        switch(sysMode) {
+        case "dev":
+            at = createTestAccessToken(anWechatToken);
+            break;
+        default: at = anWk.findUserAuth2(anWechatToken.getTicket());
+        }
+
+        return at;
+    }
+
+    /**
      * 测试账号
      *
      * @param anWechatToken
@@ -186,7 +203,7 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
         final String code = anWechatToken.getTicket();
         switch (code) {
         case "1"://
-            accessToken.setOpenId("oqJfawIAHfDxzz3-LApBxkZwMp9U");
+            accessToken.setOpenId("oqJfawK1kv285J87PvYDIDyJGZIY");
             break;
         case "2":
             accessToken.setOpenId("oqJfawF9wTPihEnGXIhT98M7-g0A");
