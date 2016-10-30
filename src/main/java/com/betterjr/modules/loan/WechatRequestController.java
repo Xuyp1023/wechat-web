@@ -63,7 +63,7 @@ public class WechatRequestController {
     @RequestMapping(value = "/queryRequestList", method = RequestMethod.POST)
     public @ResponseBody String queryBillRequestList(HttpServletRequest request, int flag, int pageNum, int pageSize) {
         Map<String, Object> map = Servlets.getParametersStartingWith(request, "");
-        String[] queryTerm = new String[] { "businStatus"};
+        String[] queryTerm = new String[] {"tradeStatus"};
         map = Collections3.filterMap(map, queryTerm);
         logger.info("查询票据融资申请，入参:" + map.toString());
 
