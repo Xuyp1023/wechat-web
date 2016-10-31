@@ -9,10 +9,9 @@ package com.betterjr.modules.wechat.handler.url;
 
 import java.util.List;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-
+import com.betterjr.common.service.SpringContextHolder;
 import com.betterjr.common.utils.BetterStringUtils;
+import com.betterjr.modules.acceptbill.dubboclient.WeChatScfAcceptBillDubboClientService;
 import com.betterjr.modules.wechat.dispatcher.UrlControl;
 
 /**
@@ -22,13 +21,15 @@ import com.betterjr.modules.wechat.dispatcher.UrlControl;
 public class BillUrlHandler implements UrlHandler {
     public static final String BILL_FUNC_CODE = "20";
 
-    // public final ScfAcceptBillService billService;
+
+    public final WeChatScfAcceptBillDubboClientService acceptBillService;
 
     /**
      *
      */
     public BillUrlHandler() {
         //     billService = SpringContextHolder.getBean(ScfAcceptBillService.class);
+        acceptBillService = SpringContextHolder.getBean(WeChatScfAcceptBillDubboClientService.class);
     }
 
     /*
@@ -44,12 +45,10 @@ public class BillUrlHandler implements UrlHandler {
             final List<String> params = anUrlControl.getParam(UrlControl.FUNC_PARAMS);
 
             if (params.size() == 1) {
-                final Subject subject = SecurityUtils.getSubject();
                 try {
                     final Long billId = Long.valueOf(params.get(0));
-                    // final ScfAcceptBill acceptBill = billService.getAcceptBill(billId);
-
-                    if (BetterStringUtils.equals(/*acceptBill.getFinanceFlag()*/"0", "0")) {
+                    final String billStatus = acceptBillService.findBillStatus(billId);
+                    if (BetterStringUtils.equals(billStatus, "2") == false) {
                         anUrlControl.setUrl("./wechat/index.html#/bill/detail/" + params.get(0));
                     }
                     else {

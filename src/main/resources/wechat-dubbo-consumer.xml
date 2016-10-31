@@ -29,6 +29,7 @@
         com.betterjr.modules.operator.dubboclient,
         com.betterjr.modules.role.dubboclient,
         com.betterjr.modules.wechat.dubboclient,
+        com.betterjr.modules.acceptbill.dubboclient,
         com.betterjr.dubbo.extend.filter.user" />
 
 </beans>
