@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.betterjr.common.web.AjaxObject;
 import com.betterjr.common.web.Servlets;
 import com.betterjr.modules.document.entity.CustFileItem;
-import com.betterjr.modules.document.utils.CustFileClientUtils;
+import com.betterjr.modules.document.service.DataStoreService;
+import com.betterjr.modules.document.utils.FileWebClientUtils;
 import com.betterjr.modules.wechat.dubboclient.CustWeChatDubboClientService;
 
 /**
@@ -38,6 +40,8 @@ public class WechatPlatformController {
 
     private static final Logger logger = LoggerFactory.getLogger(WechatPlatformController.class);
 
+    @Autowired
+    private DataStoreService  dataStoreService;
     @Resource
     private CustWeChatDubboClientService wechatDubboService;
 
@@ -104,7 +108,7 @@ public class WechatPlatformController {
             final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
             if (openIdObj != null) {
                 final CustFileItem fileItem = wechatDubboService.fileDownload(id);
-                CustFileClientUtils.fileDownload(response, fileItem, wechatDubboService.findFileBasePath());
+                FileWebClientUtils.fileDownload(dataStoreService, response, fileItem);
             }
         }
         catch (final Exception e) {
