@@ -1,10 +1,8 @@
 package com.betterjr.modules.agreement;
 
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.rpc.RpcException;
-import com.betterjr.common.config.ParamNames;
 import com.betterjr.common.exception.BytterException;
-import com.betterjr.common.utils.UserUtils;
+import com.betterjr.common.exception.BytterTradeException;
 import com.betterjr.common.web.AjaxObject;
 import com.betterjr.common.web.Servlets;
+import com.betterjr.modules.account.dubboclient.CustOperatorDubboClientService;
 import com.betterjr.modules.agreement.IScfElecAgreementService;
 import com.betterjr.modules.document.entity.CustFileItem;
 import com.betterjr.modules.document.service.DataStoreService;
@@ -40,13 +37,19 @@ public class WechatElecAgreementController {
     
     @Autowired
     private DataStoreService  dataStoreService;
+    @Autowired
+    private CustOperatorDubboClientService custOperatorDubboClientService;
     
     @RequestMapping(value = "/queryElecAgreement", method = RequestMethod.POST)
     public @ResponseBody String queryElecAgreement(HttpServletRequest request, int pageNum, int pageSize) {
         Map anMap = Servlets.getParametersStartingWith(request, "");
         logger.info("分页查询电子合同, 入参:"+anMap.toString());
         try {
-            fillLoginCustNo(anMap);
+            Long custNo=custOperatorDubboClientService.findCustNo();
+            if(custNo==null){
+                throw new BytterTradeException("当前登录客户号获取失败");
+            }
+            anMap.put("custNo", custNo);
             return scfElecAgreementService.webQueryElecAgreementByPage(anMap, pageNum, pageSize);
         } catch (RpcException btEx) {
             logger.error("分页查询电子合同异常："+btEx.getMessage());
@@ -183,17 +186,4 @@ public class WechatElecAgreementController {
             return AjaxObject.newError("查询电子合同详情异常").toJson();
         }
     }
-    
-    /***
-     * 获取当前登录客户号
-     * @param anMap
-     */
-    private void fillLoginCustNo(Map<String, Object> anMap) {
-        if(UserUtils.supplierUser() || UserUtils.sellerUser()){
-            anMap.put("custNo", UserUtils.getDefCustInfo().getCustNo());
-        }
-        else if(UserUtils.factorUser()){
-            anMap.put("factorNo", UserUtils.getDefCustInfo().getCustNo());
-        }
-    } 
 }
