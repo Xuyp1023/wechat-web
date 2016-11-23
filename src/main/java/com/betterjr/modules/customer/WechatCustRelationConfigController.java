@@ -4,13 +4,15 @@ import static com.betterjr.common.web.ControllerExceptionHandler.exec;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.betterjr.common.utils.BTAssert;
+import com.betterjr.common.exception.BytterTradeException;
+import com.betterjr.modules.account.dubboclient.CustOperatorDubboClientService;
 
 @Controller
 @RequestMapping("/Wechat/Platform/CustRelationConfig")
@@ -20,6 +22,8 @@ public class WechatCustRelationConfigController {
     
     @Reference(interfaceClass=ICustRelationConfigService.class)
     private ICustRelationConfigService custRelationConfigService;
+    @Autowired
+    private CustOperatorDubboClientService custOperatorDubboClientService;
     
     @RequestMapping(value = "/findCustType", method = RequestMethod.POST)
     public @ResponseBody String findCustType() {
@@ -27,21 +31,29 @@ public class WechatCustRelationConfigController {
     }
     
     @RequestMapping(value = "/findCustInfo", method = RequestMethod.POST)
-    public @ResponseBody String findCustInfo(String custType,Long custNo) {
-        logger.info("查询客户信息，入参：custType="+custType+"，custNo="+custNo);
-        return exec(() -> custRelationConfigService.webFindCustInfo(custType,custNo), "查询客户信息", logger);
+    public @ResponseBody String findCustInfo(String custType,String custName) {
+        logger.info("查询客户信息，入参：custType="+custType+"，custName："+custName);
+        return exec(() -> custRelationConfigService.webFindCustInfo(custType,findCurrentLongCustNo(),custName), "查询客户信息", logger);
     }
     
     @RequestMapping(value = "/addCustRelation", method = RequestMethod.POST)
-    public @ResponseBody String addCustRelation(String custType,Long custNo,Long relationCustNo) {
-        logger.info("添加客户关系，入参：custType="+custType+"，custNo="+custNo+"，relationCustNo="+relationCustNo);
-        return exec(() -> custRelationConfigService.webAddCustRelation(custType, custNo, relationCustNo), "添加客户关系", logger);
+    public @ResponseBody String addCustRelation(String custType,String relationCustStr) {
+        logger.info("添加客户关系，入参：custType="+custType+"，relationCustStr="+relationCustStr);
+        return exec(() -> custRelationConfigService.webAddCustRelation(custType, findCurrentLongCustNo(), relationCustStr), "添加客户关系", logger);
     }
     
     @RequestMapping(value = "/queryCustRelation", method = RequestMethod.POST)
-    public @ResponseBody String queryCustRelation(Long custNo,String flag,int pageNum,int pageSize) {
-        logger.info("分页查询客户信息，入参：custNo="+custNo);
-        return exec(() -> custRelationConfigService.webQueryCustRelation(custNo,flag,pageNum,pageSize), "分页查询客户关系信息", logger);
+    public @ResponseBody String queryCustRelation(String flag,int pageNum,int pageSize,String relationType) {
+        return exec(() -> custRelationConfigService.webQueryCustRelation(findCurrentLongCustNo(),flag,pageNum,pageSize,relationType), "分页查询客户关系信息", logger);
+    }
+    
+    public Long findCurrentLongCustNo(){
+        Long custNo=custOperatorDubboClientService.findCustNo();
+        logger.info("当前登录：custNo="+custNo);
+        if(custNo==null){
+            throw new BytterTradeException("当前登录客户号获取失败");
+        }
+        return custNo;
     }
     
 }
