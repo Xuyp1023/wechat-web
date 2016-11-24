@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.dubbo.rpc.RpcException;
+import com.betterjr.common.exception.BytterException;
 import com.betterjr.common.web.AjaxObject;
 import com.betterjr.common.web.Servlets;
 
@@ -23,6 +25,7 @@ public class WechatCustOpenAccountController2 {
 
     @Reference(interfaceClass = ICustOpenAccountService2.class)
     private ICustOpenAccountService2 custOpenAccountService;
+
 
     private static final Logger logger = LoggerFactory.getLogger(WechatCustOpenAccountController2.class);
 
@@ -34,16 +37,16 @@ public class WechatCustOpenAccountController2 {
         logger.info("检查申请机构名称是否存在,入参: " + custName);
         return exec(() -> custOpenAccountService.webCheckCustExistsByCustName(custName), "检查申请机构名称是否存在失败", logger);
     }
-
+    
     /**
      * 检查组织机构代码证是否存在
      */
     @RequestMapping(value = "/checkCustExistsByIdentNo", method = RequestMethod.POST)
-    public @ResponseBody String checkCustExistsByIdentNo(String identNo) {
+    public @ResponseBody String checkCustExistsByIdentNo(String identNo){
         logger.info("检查组织机构代码证是否存在,入参: " + identNo);
         return exec(() -> custOpenAccountService.webCheckCustExistsByIdentNo(identNo), "检查组织机构代码证是否存在失败", logger);
     }
-
+    
     /**
      * 检查营业执照号码是否存在
      */
@@ -52,7 +55,7 @@ public class WechatCustOpenAccountController2 {
         logger.info("检查营业执照号码是否存在,入参: " + businLicence);
         return exec(() -> custOpenAccountService.webCheckCustExistsByBusinLicence(businLicence), "检查营业执照号码是否存在失败", logger);
     }
-
+    
     /**
      * 检查银行账号是否存在
      */
@@ -61,7 +64,7 @@ public class WechatCustOpenAccountController2 {
         logger.info("检查银行账号是否存在,入参: " + bankAccount);
         return exec(() -> custOpenAccountService.webCheckCustExistsByBankAccount(bankAccount), "检查银行账号是否存在失败", logger);
     }
-
+    
     /**
      * 检查电子邮箱是否存在
      */
@@ -70,7 +73,7 @@ public class WechatCustOpenAccountController2 {
         logger.info("检查电子邮箱是否存在,入参: " + email);
         return exec(() -> custOpenAccountService.webCheckCustExistsByEmail(email), "检查电子邮箱是否存在失败", logger);
     }
-
+    
     /**
      * 检查银行账号是否存在
      */
@@ -79,7 +82,7 @@ public class WechatCustOpenAccountController2 {
         logger.info("检查手机号码是否存在,入参: " + mobileNo);
         return exec(() -> custOpenAccountService.webCheckCustExistsByMobileNo(mobileNo), "检查手机号码是否存在失败", logger);
     }
-
+    
     /**
      * 开户申请提交
      */
@@ -89,7 +92,7 @@ public class WechatCustOpenAccountController2 {
         logger.info("开户申请提交,入参: " + anMap.toString());
         return exec(() -> custOpenAccountService.webSaveOpenAccountApply(anMap, operId, fileList), "开户申请提交失败", logger);
     }
-
+    
     /**
      * 开户信息修改
      */
@@ -99,7 +102,7 @@ public class WechatCustOpenAccountController2 {
         logger.info("开户信息修改,入参: " + anMap.toString());
         return exec(() -> custOpenAccountService.webSaveModifyOpenAccount(anMap, id, fileList), "开户信息修改失败", logger);
     }
-
+    
     /**
      * 代录开户资料申请提交
      */
@@ -109,30 +112,30 @@ public class WechatCustOpenAccountController2 {
         logger.info("代录开户资料提交,入参：" + anMap.toString());
         return exec(() -> custOpenAccountService.webSaveOpenAccountInfoByInstead(anMap, insteadRecordId, fileList), "代录开户资料提交失败", logger);
     }
-
+    
     /**
      * 客户开户资料暂存
      */
     @RequestMapping(value = "/saveAccInfo", method = RequestMethod.POST)
     public @ResponseBody String saveOpenAccountInfo(HttpServletRequest request, Long id, String fileList) {
         try {
+            Map<String, Object> anMap = Servlets.getParametersStartingWith(request, "");
             final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
             if (openIdObj != null) {
-                Map<String, Object> anMap = Servlets.getParametersStartingWith(request, "");
-                logger.info("客户开户资料暂存,入参：" + anMap.toString());
                 final String openId = String.valueOf(openIdObj);
                 anMap.put("wechatOpenId", openId);
-                return custOpenAccountService.webSaveOpenAccountInfo(anMap, id, fileList);
+                logger.info("客户开户资料暂存,入参：" + anMap.toString());
+                return exec(() -> custOpenAccountService.webSaveOpenAccountInfo(anMap, id, fileList), "暂存失败", logger);
             }
             return AjaxObject.newError("开户失败").toJson();
         }
         catch (final Exception e) {
-            return AjaxObject.newError("获取开户信息失败").toJson();
+            return AjaxObject.newError("开户失败").toJson();
         }
     }
     
     /**
-     * 查询开户资料
+     * 微信查询开户资料
      */
     @RequestMapping(value = "/findAccountTmpInfo", method = RequestMethod.POST)
     public @ResponseBody String findAccountTmpInfo() {
@@ -155,5 +158,28 @@ public class WechatCustOpenAccountController2 {
     @RequestMapping(value = "/saveSingleFileLink", method = RequestMethod.POST)
     public @ResponseBody String saveSingleFileLink(Long id, final String fileTypeName, final String fileMediaId) {
         return exec(() -> custOpenAccountService.webSaveSingleFileLink(id, fileTypeName, fileMediaId), "开户资料附件保存", logger);
+    }
+    
+    /**
+     * 根据batchNo生成对应文件类型Map Json对象(微信使用)
+     */
+    @RequestMapping(value = "/findAccountFileByBatChNo", method = RequestMethod.POST)
+    public @ResponseBody String findAccountFileByBatChNo(Long batchNo) {
+        logger.info("附件查询,入参：" + batchNo );
+        try {
+
+            return custOpenAccountService.webFindAccountFileByBatChNo(batchNo);
+        }
+        catch (RpcException e) {
+            logger.error(e.getMessage(), e);
+            if (BytterException.isCauseBytterException(e)) {
+                return AjaxObject.newError(e.getCause().getMessage()).toJson();
+            }
+            return AjaxObject.newError("附件查询失败").toJson();
+        }
+        catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return AjaxObject.newError("附件查询失败").toJson();
+        }
     }
 }
