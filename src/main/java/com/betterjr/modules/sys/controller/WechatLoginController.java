@@ -45,7 +45,7 @@ public class WechatLoginController {
             }
             if (shiroUser.getUserType().equals(UserType.NONE_USER)) {
                 logger.info("匿名用户登陆，去到开户页!");
-                response.sendRedirect("wechat/index.html#/register");
+                response.sendRedirect("wechat/index.html#/register/basic");
                 return;
             }
             else {
