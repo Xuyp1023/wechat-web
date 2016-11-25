@@ -12,11 +12,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.betterjr.common.data.UserType;
 import com.betterjr.common.service.SpringContextHolder;
+import com.betterjr.common.utils.BetterStringUtils;
 import com.betterjr.common.utils.UserUtils;
 import com.betterjr.common.web.Servlets;
 import com.betterjr.modules.account.entity.CustOperatorInfo;
+import com.betterjr.modules.customer.ICustInsteadService2;
+import com.betterjr.modules.customer.ICustOpenAccountService2;
 import com.betterjr.modules.sys.security.ShiroUser;
 import com.betterjr.modules.wechat.data.api.AccessToken;
 import com.betterjr.modules.wechat.dispatcher.UrlDispatcher;
@@ -26,6 +30,9 @@ import com.betterjr.modules.wechat.dubboclient.CustWeChatDubboClientService;
 @RequestMapping(value = "/")
 public class WechatLoginController {
     private static Logger logger = LoggerFactory.getLogger(WechatLoginController.class);
+
+    @Reference(interfaceClass = ICustOpenAccountService2.class)
+    private ICustOpenAccountService2 custOpenAccountService;
 
     /**
      * 管理登录
@@ -40,12 +47,23 @@ public class WechatLoginController {
             final CustWeChatDubboClientService wechatClientService = SpringContextHolder.getBean(CustWeChatDubboClientService.class);
 
             final AccessToken at = shiroUser.getParam("accessToken");
-            if (at != null) {
-                Servlets.getSession().setAttribute("wechat_openId", at.getOpenId());
+            if (at == null) {
+                response.sendRedirect("wechat/403.html");
+                return;
             }
+            String openId = at.getOpenId();
+            Servlets.getSession().setAttribute("wechat_openId", openId);
             if (shiroUser.getUserType().equals(UserType.NONE_USER)) {
                 logger.info("匿名用户登陆，去到开户页!");
-                response.sendRedirect("wechat/index.html#/register");
+                
+                String status = custOpenAccountService.findOpenAccountStatus(openId);
+                if (BetterStringUtils.equals(status, "1")) {
+                    response.sendRedirect("wechat/index.html#/register/waitAudit");
+                } else if (BetterStringUtils.equals(status, "2")) {
+                    response.sendRedirect("wechat/index.html#/register/waitActive");
+                } else{
+                    response.sendRedirect("wechat/index.html#/register/basic");
+                }
                 return;
             }
             else {
