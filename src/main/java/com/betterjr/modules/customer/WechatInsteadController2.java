@@ -2,6 +2,10 @@ package com.betterjr.modules.customer;
 
 import static com.betterjr.common.web.ControllerExceptionHandler.exec;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -31,21 +35,17 @@ public class WechatInsteadController2 {
 
     
     /**
-     * 微信代录申请-申请代录
+     * 微信代录申请-申请代录(检查短信校验码)
      */
     @RequestMapping(value = "/wechatAddInsteadApply", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String wechatAddInsteadApply(final String custName, final Long id, final String fileList) {
+    public @ResponseBody String wechatAddInsteadApply(HttpServletRequest request, final Long id, final String fileList) {
         final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
-        try {
-            if (openIdObj != null) {
-//                final String openId = String.valueOf(openIdObj);
-                return insteadService.webWechatAddInsteadApply(custName, id, fileList);
-            }else {
-                return AjaxObject.newError("申请代录失败").toJson();
-            }
+        if (openIdObj != null) {
+            Map<String, Object> anMap = Servlets.getParametersStartingWith(request, "");
+            return exec(() -> insteadService.webWechatAddInsteadApply(anMap, id, fileList), "申请代录出错", logger);
         }
-        catch (final Exception e) {
-            return AjaxObject.newError("申请代录失败").toJson();
+        else {
+            return AjaxObject.newError("申请代录失败,请重新点击开户尝试").toJson();
         }
     }
     
@@ -66,4 +66,5 @@ public class WechatInsteadController2 {
         logger.debug("代录项目 确认通过 入参:id=" + id + " reason=" + reason);
         return exec(() -> oldInsteadService.webConfirmPassInsteadRecord(id, reason), "代录项目 确认通过 出错", logger);
     }
+    
 }
