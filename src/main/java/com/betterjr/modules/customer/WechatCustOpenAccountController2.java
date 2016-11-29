@@ -118,20 +118,15 @@ public class WechatCustOpenAccountController2 {
      */
     @RequestMapping(value = "/saveAccInfo", method = RequestMethod.POST)
     public @ResponseBody String saveOpenAccountInfo(HttpServletRequest request, Long id, String fileList) {
-        try {
-            Map<String, Object> anMap = Servlets.getParametersStartingWith(request, "");
-            final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
-            if (openIdObj != null) {
-                final String openId = String.valueOf(openIdObj);
-                anMap.put("wechatOpenId", openId);
-                logger.info("客户开户资料暂存,入参：" + anMap.toString());
-                return exec(() -> custOpenAccountService.webSaveOpenAccountInfo(anMap, id, fileList), "暂存失败", logger);
-            }
-            return AjaxObject.newError("开户失败").toJson();
+        Map<String, Object> anMap = Servlets.getParametersStartingWith(request, "");
+        final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
+        if (openIdObj != null) {
+            final String openId = String.valueOf(openIdObj);
+            anMap.put("wechatOpenId", openId);
+            logger.info("客户开户资料暂存,入参：" + anMap.toString());
+            return exec(() -> custOpenAccountService.webSaveOpenAccountInfo(anMap, id, fileList), "暂存失败", logger);
         }
-        catch (final Exception e) {
-            return AjaxObject.newError("开户失败").toJson();
-        }
+        return AjaxObject.newError("开户失败").toJson();
     }
     
     /**
@@ -181,5 +176,13 @@ public class WechatCustOpenAccountController2 {
             logger.error(e.getMessage(), e);
             return AjaxObject.newError("附件查询失败").toJson();
         }
+    }
+    
+    /**
+     * 微信发送手机验证码
+     */
+    @RequestMapping(value = "/sendValidMessage", method = RequestMethod.POST)
+    public @ResponseBody String sendValidMessage(String mobileNo) {
+        return exec(() -> custOpenAccountService.webSendValidMessage(mobileNo), "发送手机短信验证码", logger);
     }
 }
