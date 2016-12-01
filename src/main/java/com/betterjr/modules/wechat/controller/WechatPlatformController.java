@@ -139,6 +139,17 @@ public class WechatPlatformController {
             resp.sendRedirect(url);
         }
     }
+
+    @RequestMapping(value = "/toSuccess", method = { RequestMethod.POST, RequestMethod.GET })
+    public void toSuccess(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
+        final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
+        final String appId = wechatDubboService.getAppId();
+        final String wechatUrl = wechatDubboService.getWechatUrl();
+        if (openIdObj != null) {
+            final String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + wechatUrl + "/wechatOauth2&response_type=code&scope=snsapi_base&state=10,1#wechat_redirect";
+            resp.sendRedirect(url);
+        }
+    }
     /**
      * 开户
      */
