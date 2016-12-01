@@ -19,7 +19,6 @@ import com.betterjr.common.utils.BetterStringUtils;
 import com.betterjr.common.utils.UserUtils;
 import com.betterjr.common.web.Servlets;
 import com.betterjr.modules.account.entity.CustOperatorInfo;
-import com.betterjr.modules.customer.ICustInsteadService2;
 import com.betterjr.modules.customer.ICustOpenAccountService2;
 import com.betterjr.modules.sys.security.ShiroUser;
 import com.betterjr.modules.wechat.data.api.AccessToken;
@@ -77,7 +76,7 @@ public class WechatLoginController {
                         final String state = request.getParameter("state");
                         String url = UrlDispatcher.dispatch(state);
                         if (state != null && state.equals("10,1") == true) {
-                            url = "./wechat/index.html#/register/detail";
+                            url = "./wechat/index.html#/accountSuccess/";
                         }
                         logger.info("正常用户，进入相应页面!" + url);
                         response.sendRedirect(url);

@@ -185,4 +185,12 @@ public class WechatCustOpenAccountController2 {
     public @ResponseBody String sendValidMessage(String mobileNo) {
         return exec(() -> custOpenAccountService.webSendValidMessage(mobileNo), "发送手机短信验证码", logger);
     }
+    
+    /**
+     * 删除附件信息
+     */
+    @RequestMapping(value = "/deleteSingleFile", method = RequestMethod.POST)
+    public @ResponseBody String deleteSingleFile(Long id) {
+        return exec(() -> custOpenAccountService.webDeleteSingleFile(id), "删除附件", logger);
+    }
 }
