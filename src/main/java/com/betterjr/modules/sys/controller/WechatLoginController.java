@@ -76,7 +76,7 @@ public class WechatLoginController {
                         final String state = request.getParameter("state");
                         String url = UrlDispatcher.dispatch(state);
                         if (state != null && state.equals("10,1") == true) {
-                            url = "./wechat/index.html#/accountSuccess/";
+                            url = "./wechat/index.html#/register/accountSuccess/";
                         }
                         logger.info("正常用户，进入相应页面!" + url);
                         response.sendRedirect(url);
