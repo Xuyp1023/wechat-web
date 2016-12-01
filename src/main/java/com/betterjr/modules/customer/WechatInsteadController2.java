@@ -67,4 +67,12 @@ public class WechatInsteadController2 {
         return exec(() -> oldInsteadService.webConfirmPassInsteadRecord(id, reason), "代录项目 确认通过 出错", logger);
     }
     
+    /**
+     * 代录激活操作
+     */
+    @RequestMapping(value = "/saveActiveOpenAccount", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody String saveActiveOpenAccount(final Long id) {
+        return exec(() -> insteadService.webSaveActiveOpenAccount(id), "激活出错", logger);
+    }
+    
 }
