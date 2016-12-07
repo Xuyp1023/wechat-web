@@ -23,15 +23,13 @@ import com.betterjr.common.web.Servlets;
  * @author wudy
  */
 @Controller
-@RequestMapping("/Wechat/Platform/Instead2")
-public class WechatInsteadController2 {
+@RequestMapping("/Wechat/Platform/Instead")
+public class WechatInsteadController {
 
-    private static final Logger logger = LoggerFactory.getLogger(WechatInsteadController2.class);
+    private static final Logger logger = LoggerFactory.getLogger(WechatInsteadController.class);
 
-    @Reference(interfaceClass = ICustInsteadService2.class)
-    private ICustInsteadService2 insteadService;
     @Reference(interfaceClass = ICustInsteadService.class)
-    private ICustInsteadService oldInsteadService;
+    private ICustInsteadService insteadService;
 
     
     /**
@@ -64,7 +62,7 @@ public class WechatInsteadController2 {
     @RequestMapping(value = "/confirmPassInsteadRecord", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String confirmPassInsteadRecord(final Long id, final String reason) {
         logger.debug("代录项目 确认通过 入参:id=" + id + " reason=" + reason);
-        return exec(() -> oldInsteadService.webConfirmPassInsteadRecord(id, reason), "代录项目 确认通过 出错", logger);
+        return exec(() -> insteadService.webConfirmPassInsteadRecord(id, reason), "代录项目 确认通过 出错", logger);
     }
     
     /**

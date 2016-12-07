@@ -20,14 +20,14 @@ import com.betterjr.common.web.AjaxObject;
 import com.betterjr.common.web.Servlets;
 
 @Controller
-@RequestMapping("/Wechat/Platform/Account2")
-public class WechatCustOpenAccountController2 {
+@RequestMapping("/Wechat/Platform/Account")
+public class WechatCustOpenAccountController {
 
-    @Reference(interfaceClass = ICustOpenAccountService2.class)
-    private ICustOpenAccountService2 custOpenAccountService;
+    @Reference(interfaceClass = ICustOpenAccountService.class)
+    private ICustOpenAccountService custOpenAccountService;
 
 
-    private static final Logger logger = LoggerFactory.getLogger(WechatCustOpenAccountController2.class);
+    private static final Logger logger = LoggerFactory.getLogger(WechatCustOpenAccountController.class);
 
     /**
      * 检查申请机构名称是否存在
@@ -81,36 +81,6 @@ public class WechatCustOpenAccountController2 {
     public @ResponseBody String checkCustExistsByMobileNo(String mobileNo) {
         logger.info("检查手机号码是否存在,入参: " + mobileNo);
         return exec(() -> custOpenAccountService.webCheckCustExistsByMobileNo(mobileNo), "检查手机号码是否存在失败", logger);
-    }
-    
-    /**
-     * 开户申请提交
-     */
-    @RequestMapping(value = "/saveOpenAccountApply", method = RequestMethod.POST)
-    public @ResponseBody String saveOpenAccountApply(HttpServletRequest request, Long operId, String fileList) {
-        Map<String, Object> anMap = Servlets.getParametersStartingWith(request, "");
-        logger.info("开户申请提交,入参: " + anMap.toString());
-        return exec(() -> custOpenAccountService.webSaveOpenAccountApply(anMap, operId, fileList), "开户申请提交失败", logger);
-    }
-    
-    /**
-     * 开户信息修改
-     */
-    @RequestMapping(value = "/saveModifyOpenAccount", method = RequestMethod.POST)
-    public @ResponseBody String saveModifyOpenAccount(HttpServletRequest request, Long id, String fileList) {
-        Map<String, Object> anMap = Servlets.getParametersStartingWith(request, "");
-        logger.info("开户信息修改,入参: " + anMap.toString());
-        return exec(() -> custOpenAccountService.webSaveModifyOpenAccount(anMap, id, fileList), "开户信息修改失败", logger);
-    }
-    
-    /**
-     * 代录开户资料申请提交
-     */
-    @RequestMapping(value = "/saveAccInfoInstead", method = RequestMethod.POST)
-    public @ResponseBody String saveOpenAccountInfoByInstead(HttpServletRequest request, Long insteadRecordId, String fileList) {
-        Map<String, Object> anMap = Servlets.getParametersStartingWith(request, "");
-        logger.info("代录开户资料提交,入参：" + anMap.toString());
-        return exec(() -> custOpenAccountService.webSaveOpenAccountInfoByInstead(anMap, insteadRecordId, fileList), "代录开户资料提交失败", logger);
     }
     
     /**
