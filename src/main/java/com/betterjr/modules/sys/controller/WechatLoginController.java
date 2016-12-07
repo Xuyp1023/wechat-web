@@ -19,7 +19,7 @@ import com.betterjr.common.utils.BetterStringUtils;
 import com.betterjr.common.utils.UserUtils;
 import com.betterjr.common.web.Servlets;
 import com.betterjr.modules.account.entity.CustOperatorInfo;
-import com.betterjr.modules.customer.ICustOpenAccountService2;
+import com.betterjr.modules.customer.ICustOpenAccountService;
 import com.betterjr.modules.sys.security.ShiroUser;
 import com.betterjr.modules.wechat.data.api.AccessToken;
 import com.betterjr.modules.wechat.dispatcher.UrlDispatcher;
@@ -30,8 +30,8 @@ import com.betterjr.modules.wechat.dubboclient.CustWeChatDubboClientService;
 public class WechatLoginController {
     private static Logger logger = LoggerFactory.getLogger(WechatLoginController.class);
 
-    @Reference(interfaceClass = ICustOpenAccountService2.class)
-    private ICustOpenAccountService2 custOpenAccountService;
+    @Reference(interfaceClass = ICustOpenAccountService.class)
+    private ICustOpenAccountService custOpenAccountService;
 
     /**
      * 管理登录
