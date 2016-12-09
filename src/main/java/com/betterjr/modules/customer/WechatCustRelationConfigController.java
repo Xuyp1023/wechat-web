@@ -47,6 +47,55 @@ public class WechatCustRelationConfigController {
         return exec(() -> custRelationConfigService.webQueryCustRelation(findCurrentLongCustNo(),flag,pageNum,pageSize,relationType), "分页查询客户关系信息", logger);
     }
     
+    /***
+     * 查询电子合同服务商客户
+     * @return
+     */
+    @RequestMapping(value = "/findElecAgreementServiceCust", method = RequestMethod.POST)
+    public @ResponseBody String findElecAgreementServiceCust() {
+        return exec(() -> custRelationConfigService.webFindElecAgreementServiceCust(), "查询电子合同服务商客户", logger);
+    }
+
+    // 查询临时文件
+    @RequestMapping(value = "/findCustAduitTemp", method = RequestMethod.POST)
+    public @ResponseBody String findCustAduitTemp(Long relateCustNo) {
+        return exec(() -> custRelationConfigService.webFindCustAduitTempFile(relateCustNo, findCurrentLongCustNo()), "查询临时文件", logger);
+    }
+    
+    /**
+     * 保存临时文件
+     * @param relateCustNo
+     * @param custNo
+     * @param fileTypeName
+     * @param fileMediaId
+     * @param anCustType
+     * @return
+     */
+    @RequestMapping(value = "/addCustAduitTempFile", method = RequestMethod.POST)
+    public @ResponseBody String addCustAduitTempFile(Long relateCustNo,String fileTypeName,String fileMediaId,String custType){
+        return exec(() -> custRelationConfigService.webAddCustAduitTempFile(relateCustNo, findCurrentLongCustNo(), fileTypeName, fileMediaId,custType), "保存临时文件", logger);
+    }
+    
+    /***
+     * 删除附件
+     */
+    @RequestMapping(value = "/saveDeleteCustAduitTempFile", method = RequestMethod.POST)
+    public @ResponseBody String saveDeleteCustAduitTempFile(Long id){
+        return exec(() -> custRelationConfigService.webSaveDeleteCustAduitTempFile(id), "删除附件", logger);
+    }
+    
+    /***
+     * 添加保理方客户关系
+     * @param custType
+     * @param relationCustNo
+     * @return
+     */
+    @RequestMapping(value = "/addFactorCustRelation", method = RequestMethod.POST)
+    public @ResponseBody String addFactorCustRelation(String factorCustType,String wosCustType,String factorCustNoList,String wosCustNoList) {
+        logger.info("添加保理方客户关系，入参：custType="+factorCustType+"，wosCustType="+wosCustType+"，factorCustNoList="+factorCustNoList+"，wosCustStr="+wosCustNoList);
+        return exec(() -> custRelationConfigService.webAddFactorCustRelation(factorCustType, wosCustType, findCurrentLongCustNo(), factorCustNoList, wosCustNoList), "添加保理方客户关系", logger);
+    }
+    
     public Long findCurrentLongCustNo(){
         Long custNo=custOperatorDubboClientService.findCustNo();
         logger.info("当前登录：custNo="+custNo);
@@ -55,5 +104,4 @@ public class WechatCustRelationConfigController {
         }
         return custNo;
     }
-    
 }
