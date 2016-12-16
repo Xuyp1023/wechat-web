@@ -59,7 +59,7 @@ public class WechatCustRelationConfigController {
     // 查询临时文件
     @RequestMapping(value = "/findCustAduitTemp", method = RequestMethod.POST)
     public @ResponseBody String findCustAduitTemp(Long relateCustNo) {
-        return exec(() -> custRelationConfigService.webFindCustAduitTempFile(relateCustNo, findCurrentLongCustNo()), "查询临时文件", logger);
+        return exec(() -> custRelationConfigService.webFindCustAduitTempFile(relateCustNo), "查询临时文件", logger);
     }
     
     /**
@@ -73,7 +73,7 @@ public class WechatCustRelationConfigController {
      */
     @RequestMapping(value = "/addCustAduitTempFile", method = RequestMethod.POST)
     public @ResponseBody String addCustAduitTempFile(Long relateCustNo,String fileTypeName,String fileMediaId,String custType){
-        return exec(() -> custRelationConfigService.webAddCustAduitTempFile(relateCustNo, findCurrentLongCustNo(), fileTypeName, fileMediaId,custType), "保存临时文件", logger);
+        return exec(() -> custRelationConfigService.webAddCustAduitTempFile(relateCustNo, fileTypeName, fileMediaId,custType), "保存临时文件", logger);
     }
     
     /***
@@ -93,7 +93,18 @@ public class WechatCustRelationConfigController {
     @RequestMapping(value = "/addFactorCustRelation", method = RequestMethod.POST)
     public @ResponseBody String addFactorCustRelation(String factorCustType,String wosCustType,String factorCustNoList,String wosCustNoList) {
         logger.info("添加保理方客户关系，入参：custType="+factorCustType+"，wosCustType="+wosCustType+"，factorCustNoList="+factorCustNoList+"，wosCustStr="+wosCustNoList);
-        return exec(() -> custRelationConfigService.webAddFactorCustRelation(factorCustType, wosCustType, findCurrentLongCustNo(), factorCustNoList, wosCustNoList), "添加保理方客户关系", logger);
+        return exec(() -> custRelationConfigService.webAddFactorCustRelation(factorCustType, wosCustType, factorCustNoList, wosCustNoList), "添加保理方客户关系", logger);
+    }
+    
+    /***
+     * 查询审批记录
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/findCustRelateAduitRecord", method = RequestMethod.POST)
+    public @ResponseBody String findCustRelateAduitRecord(Long custNo){
+        logger.info("入参：custNo:" + custNo);
+        return exec(() -> custRelationConfigService.webFindCustRelateAduitRecord(custNo), "查询审批记录", logger);
     }
     
     public Long findCurrentLongCustNo(){
