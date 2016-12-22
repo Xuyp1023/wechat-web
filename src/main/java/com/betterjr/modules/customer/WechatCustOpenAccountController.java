@@ -163,4 +163,23 @@ public class WechatCustOpenAccountController {
     public @ResponseBody String deleteSingleFile(Long id) {
         return exec(() -> custOpenAccountService.webDeleteSingleFile(id), "删除附件", logger);
     }
+    
+    /**
+     * 微信查询开户成功后资料
+     * --不能直接通过wechat标识去查询tmp表，因为若是微信绑定已开户账户，则tmp表中wechat标识为空--
+     */
+    @RequestMapping(value = "/findSuccessAccountInfo", method = RequestMethod.POST)
+    public @ResponseBody String findSuccessAccountInfo() {
+        try {
+            final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
+            if (openIdObj != null) {
+                final String openId = String.valueOf(openIdObj);
+                return custOpenAccountService.webFindSuccessAccountInfo(openId);
+            }
+            return AjaxObject.newError("获取开户信息失败").toJson();
+        }
+        catch (final Exception e) {
+            return AjaxObject.newError("获取开户信息失败").toJson();
+        }
+    }
 }
