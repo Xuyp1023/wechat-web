@@ -52,20 +52,6 @@ public class WeChatScfOrderController {
         }, "订单信息查询失败", logger);
     }
     
-    /**
-     * 订单无分页查询
-     * @param isOnlyNormal 是否过滤，仅查询正常未融资数据 1：未融资 0：查询所有
-     * @return
-     */
-    @RequestMapping(value = "/findOrderList", method = RequestMethod.POST)
-    public @ResponseBody String findOrderList(String custNo,String isOnlyNormal){
-        logger.info("订单信息查询,入参：custNo=" + custNo + " isOnlyNormal=" + isOnlyNormal);
-        return ControllerExceptionHandler.exec(new ExceptionHandler() {
-            public String handle() {
-                return scfOrderService.webFindOrderList(custNo, isOnlyNormal);
-            }
-        }, "订单信息查询失败", logger);
-    }
     
     /**
      * 通过融资申请信息，订单无分页查询

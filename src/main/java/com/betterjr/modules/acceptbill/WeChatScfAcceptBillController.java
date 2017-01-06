@@ -38,15 +38,6 @@ public class WeChatScfAcceptBillController {
         }, "汇票信息查询失败", logger);
     }
 
-    @RequestMapping(value = "/findAcceptBillList", method = RequestMethod.POST)
-    public @ResponseBody String findAcceptBillList(String custNo, String isOnlyNormal) {
-        logger.info("汇票信息查询,入参：custNo" + custNo + " isOnlyNormal=" + isOnlyNormal);
-        return ControllerExceptionHandler.exec(new ExceptionHandler() {
-            public String handle() {
-                return scfAcceptBillService.webFindAcceptBillList(custNo, isOnlyNormal);
-            }
-        }, "汇票信息查询失败", logger);
-    }
 
     @RequestMapping(value = "/modifyAcceptBill", method = RequestMethod.POST)
     public @ResponseBody String modifyAcceptBill(HttpServletRequest request, Long id, String fileList, String otherFileList) {
