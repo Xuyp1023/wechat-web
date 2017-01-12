@@ -19,6 +19,7 @@
 				<entry key="authcx" value-ref="captchaFormAuthenticationFilter" />
 				<entry key="authWechat" value-ref="wechatAuthenticationFilter" />
 				<entry key="rolesOr" value-ref="rolesOrFilter"/>  
+				<entry key="userx" value-ref="betterUserFilter" />
 			</map>
 		</property>
 		<property name="filterChainDefinitions">
@@ -33,6 +34,8 @@
 	<bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
 		<property name="redirectUrl" value="/static/index.html" />
 	</bean>
+	<bean id="betterUserFilter"
+        class="com.betterjr.modules.sys.security.BetterUserFilter" />
 	<bean id="captchaFormAuthenticationFilter"
 		class="com.betterjr.modules.sys.security.CaptchaFormAuthenticationFilter" />
 		
@@ -53,8 +56,8 @@
 				/Wechat/wxRequest/** =anon
 				/wechatOauth2/** =authWechat
 				/p/** =anon
-				/Wechat/Platform/** =user,rolesOr[NONE_USER,NORM_USER]
-				/** =user,roles[NORM_USER]
+				/Wechat/Platform/** =userx,rolesOr[NONE_USER,NORM_USER]
+				/** =userx,roles[NORM_USER]
 			</value>
 		</constructor-arg>
 	</bean>
