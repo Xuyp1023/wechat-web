@@ -42,6 +42,7 @@ public class WechatPlatformController {
 
     @Autowired
     private DataStoreService  dataStoreService;
+
     @Resource
     private CustWeChatDubboClientService wechatDubboService;
 
@@ -51,6 +52,14 @@ public class WechatPlatformController {
     @RequestMapping(value = "/checkFristTradePass", method = RequestMethod.POST)
     public @ResponseBody String checkFristTradePass(final String tradePassword) {
         return exec(() -> wechatDubboService.webSaveFristLoginTradePassword(tradePassword), "验证交易密码失败！", logger);
+    }
+
+    /**
+     * 获取 当前机构角色
+     */
+    @RequestMapping(value = "/getCurrentRole", method = RequestMethod.POST)
+    public @ResponseBody String getCurrentRole() {
+        return exec(() -> wechatDubboService.webGetCurrentRole(), "获取当前角色失败！", logger);
     }
 
     /**
@@ -150,6 +159,7 @@ public class WechatPlatformController {
             resp.sendRedirect(url);
         }
     }
+
     /**
      * 开户
      */
