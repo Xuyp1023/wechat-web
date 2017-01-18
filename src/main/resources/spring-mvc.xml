@@ -23,7 +23,8 @@
 	                       com.betterjr.modules.product;
 	                       com.betterjr.modules.agreement;
 	                       com.betterjr.modules.enquiry;
-                           com.betterjr.modules.loan;"
+                           com.betterjr.modules.loan;
+                           com.betterjr.modules.workflow"
 		use-default-filters="false">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
