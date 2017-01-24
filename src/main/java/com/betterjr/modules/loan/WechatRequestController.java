@@ -107,21 +107,6 @@ public class WechatRequestController {
 
     }
     
-    @RequestMapping(value = "/confirmScheme", method = RequestMethod.POST)
-    public @ResponseBody String confirmScheme(HttpServletRequest request, String requestNo, String smsCode) {
-        Map<String, Object> map = Servlets.getParametersStartingWith(request, "");
-        logger.info("确认保理方案，入参:" + map.toString());
-
-        try {
-            return requestService.webConfirmScheme(requestNo, "0", smsCode);
-        }
-        catch (Exception ex) {
-            logger.error("确认保理方案:", ex);
-            return AjaxObject.newError("confirmScheme service failed").toJson();
-        }
-
-    }
-    
     private void fillLoginCustNo(Map<String, Object> anMap) {
         if(UserUtils.supplierUser() || UserUtils.sellerUser()){
             anMap.put("custNo", UserUtils.getDefCustInfo().getCustNo().toString());
