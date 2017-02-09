@@ -90,6 +90,7 @@ public class WechatWorkFlowController {
         return exec(() -> workFlowService.webHandleWorkFlow(taskId, param), "处理经办任务失败", logger);
     }
 
+    @MetaData(acccessType={WebAccessType.ORG_MOBILE_PASS,WebAccessType.ORG_PC}, value = "cancelWorkFlow")
     @RequestMapping(value = "/cancelWorkFlow", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String cancelWorkFlow(final HttpServletRequest request, final String taskId) {
         logger.debug("作废流程");
