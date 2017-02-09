@@ -15,7 +15,8 @@
 	<import resource="wechat-dubbo-consumer-springmvc.xml" />
 
 
-	<context:component-scan base-package="com.betterjr.modules.sys.controller;
+	<context:component-scan
+		base-package="com.betterjr.modules.sys.controller;
 	                       com.betterjr.modules.wechat.controller;
 	                       com.betterjr.modules.invoice;
 	                       com.betterjr.modules.acceptbill;
@@ -29,6 +30,22 @@
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.betterjr.modules.sys.security.UserSecurityInterceptor">
+				<property name="excludedUrls">
+					<list>
+						<value>/login</value>
+					</list>
+				</property>
+				<property name="pcFailUrl" value="/scf/app/etc/assignCredit.html" />
+				<property name="mobileFailUrl" value="/scf/app/etc/buyerConfirm.html" />
+				<property name="forbidMessage" value="你暂时无权访问该功能，请致电前海拜特互联网金融服务公司" />
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">

@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.betterjr.common.annotation.MetaData;
+import com.betterjr.common.data.WebAccessType;
 import com.betterjr.common.web.Servlets;
 
 /**
@@ -64,6 +66,7 @@ public class WechatWorkFlowController {
         return exec(() -> workFlowService.webStartWorkFlow(workFlowName, custNo, param), "启动流程失败", logger);
     }
 
+    @MetaData(acccessType={WebAccessType.ORG_MOBILE_PASS,WebAccessType.ORG_PC}, value = "passWorkFlow")
     @RequestMapping(value = "/passWorkFlow", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String passWorkFlow(final HttpServletRequest request, final String taskId) {
         logger.debug("审批通过任务");
@@ -71,6 +74,7 @@ public class WechatWorkFlowController {
         return exec(() -> workFlowService.webPassWorkFlow(taskId, param), "审批通过任务失败", logger);
     }
 
+    @MetaData(acccessType={WebAccessType.ORG_MOBILE_PASS,WebAccessType.ORG_PC}, value = "rejectWorkFlow")
     @RequestMapping(value = "/rejectWorkFlow", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String rejectWorkFlow(final HttpServletRequest request, final String taskId) {
         logger.debug("审批驳回任务");
@@ -78,6 +82,7 @@ public class WechatWorkFlowController {
         return exec(() -> workFlowService.webRejectWorkFlow(taskId, param), "审批驳回任务失败", logger);
     }
 
+    @MetaData(acccessType={WebAccessType.ORG_MOBILE_PASS,WebAccessType.ORG_PC}, value = "handleWorkFlow")
     @RequestMapping(value = "/handleWorkFlow", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String handleWorkFlow(final HttpServletRequest request, final String taskId) {
         logger.debug("处理经办任务");
