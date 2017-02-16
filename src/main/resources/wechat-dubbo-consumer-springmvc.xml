@@ -19,6 +19,7 @@
 	com.betterjr.modules.agreement,
     com.betterjr.modules.enquiry,
     com.betterjr.modules.loan,
-    com.betterjr.modules.workflow" />
+    com.betterjr.modules.workflow,
+    com.betterjr.modules.ledger" />
 
 </beans>
