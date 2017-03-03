@@ -3,6 +3,7 @@
 // CURRENT VERSION
 // ============================================================================
 // CHANGE LOG
+// V2.2 : 2017年2月27日，liuwl, task-170
 // V2.0 : 2017年1月10日, liuwl, creation
 // ============================================================================
 package com.betterjr.modules.workflow;
@@ -36,6 +37,13 @@ public class WechatWorkFlowController {
 
     @Reference(interfaceClass = IWorkFlowService.class)
     private IWorkFlowService workFlowService;
+
+    @RequestMapping(value = "/queryCurrentTaskCount", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody String queryCurrentTaskCount(final HttpServletRequest request) {
+        logger.debug("查询待办任务数量");
+        return exec(() -> workFlowService.webQueryCurrentTaskCount(), "查询待办任务数量失败", logger);
+    }
+
 
     @RequestMapping(value = "/queryCurrentTask", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String queryCurrentTask(final HttpServletRequest request, final int flag, final int pageNum, final int pageSize) {
