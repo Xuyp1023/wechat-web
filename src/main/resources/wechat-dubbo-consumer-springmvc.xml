@@ -12,6 +12,7 @@
 	<!-- 扫描dubbo注解 -->
 	<dubbo:annotation package="
     com.betterjr.modules.sys.controller,
+    com.betterjr.modules.operator.controller,
 	com.betterjr.modules.acceptbill,
 	com.betterjr.modules.invoice,
 	com.betterjr.modules.customer,
@@ -19,6 +20,9 @@
 	com.betterjr.modules.agreement,
     com.betterjr.modules.enquiry,
     com.betterjr.modules.loan,
+    com.betterjr.modules.notice,
+    com.betterjr.modules.notification,
+    com.betterjr.modules.credit,
     com.betterjr.modules.workflow" />
 
 </beans>
