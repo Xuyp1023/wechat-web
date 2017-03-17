@@ -22,15 +22,18 @@ import com.betterjr.modules.wechat.dispatcher.UrlControl;
 public class MenuUrlHandler implements UrlHandler {
     public static final String MENU_FUNC_CODE = "10";
 
-    private static final String MENU_REGISTER = "1";
+    /*    private static final String MENU_REGISTER = "1";
     private static final String MENU_ACCOUNT = "2";
     private static final String MENU_BILL = "3";
     private static final String MENU_PRODUCT = "4";
     private static final String MENU_FINANCE = "5";
     private static final String MENU_HOME = "6";
     private static final String MENU_FACTOR = "9";
-    private static final String MENU_RELATION = "10";
+    private static final String MENU_RELATION = "10";*/
 
+    private static final String MENU_FINANCING = "1";
+    private static final String MENU_INVESTMENT = "2";
+    private static final String MENU_SELFINFO = "3";
     /*
      * (non-Javadoc)
      *
@@ -45,7 +48,7 @@ public class MenuUrlHandler implements UrlHandler {
             final Subject subject = SecurityUtils.getSubject();
 
             if (params.size() == 1) {
-                switch (params.get(0)) {
+                /*switch (params.get(0)) {
                 case MENU_REGISTER:
                     anUrlControl.setUrl("./wechat/index.html#/register/basic");
                     break;
@@ -69,6 +72,17 @@ public class MenuUrlHandler implements UrlHandler {
                     break;
                 case MENU_RELATION:
                     anUrlControl.setUrl("./wechat/index.html#/relation/manage");
+                    break;
+                }*/
+                switch (params.get(0)) {
+                case MENU_FINANCING:
+                    anUrlControl.setUrl("./wechat/index.html#/home/finance");
+                    break;
+                case MENU_INVESTMENT:
+                    anUrlControl.setUrl("./wechat/index.html#/home/invest");
+                    break;
+                case MENU_SELFINFO:
+                    anUrlControl.setUrl("./wechat/index.html#/home/single");
                     break;
                 }
             }

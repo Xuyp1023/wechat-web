@@ -50,12 +50,12 @@ public class WechatLoginController {
                 response.sendRedirect("wechat/403.html");
                 return;
             }
-            String openId = at.getOpenId();
+            final String openId = at.getOpenId();
             Servlets.getSession().setAttribute("wechat_openId", openId);
             if (shiroUser.getUserType().equals(UserType.NONE_USER)) {
                 logger.info("匿名用户登陆，去到开户页!");
-                
-                String status = custOpenAccountService.findOpenAccountStatus(openId);
+
+                final String status = custOpenAccountService.findOpenAccountStatus(openId);
                 if (BetterStringUtils.equals(status, "1")) {
                     response.sendRedirect("wechat/index.html#/register/waitAudit");
                 } else if (BetterStringUtils.equals(status, "2")) {
@@ -76,7 +76,7 @@ public class WechatLoginController {
                         final String state = request.getParameter("state");
                         String url = UrlDispatcher.dispatch(state);
                         if (state != null && state.equals("10,1") == true) {
-                            url = "./wechat/index.html#/register/accountSuccess/";
+                            url = "./wechat/index.html#/home/finance";
                         }
                         logger.info("正常用户，进入相应页面!" + url);
                         response.sendRedirect(url);

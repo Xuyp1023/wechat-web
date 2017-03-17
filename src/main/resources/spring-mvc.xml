@@ -18,6 +18,7 @@
 	<context:component-scan
 		base-package="com.betterjr.modules.sys.controller;
 	                       com.betterjr.modules.wechat.controller;
+	                       com.betterjr.modules.operator.controller;
 	                       com.betterjr.modules.invoice;
 	                       com.betterjr.modules.acceptbill;
 	                       com.betterjr.modules.customer;
@@ -25,6 +26,9 @@
 	                       com.betterjr.modules.agreement;
 	                       com.betterjr.modules.enquiry;
                            com.betterjr.modules.loan;
+                           com.betterjr.modules.credit;     
+                           com.betterjr.modules.notice;
+                           com.betterjr.modules.notification;                      
                            com.betterjr.modules.workflow"
 		use-default-filters="false">
 		<context:include-filter type="annotation"

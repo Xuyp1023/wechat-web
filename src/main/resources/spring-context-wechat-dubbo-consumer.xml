@@ -31,16 +31,6 @@
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
-
-	<!-- spring redis data <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/> 
-		<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" 
-		p:host-name="192.168.2.49" p:port="6379" /> <bean id="stringRedisSerializer" 
-		class="org.springframework.data.redis.serializer.StringRedisSerializer"/> 
-		<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" 
-		p:key-serializer-ref="stringRedisSerializer" p:hash-key-serializer-ref="stringRedisSerializer" 
-		p:value-serializer-ref="stringRedisSerializer" p:hash-value-serializer-ref="stringRedisSerializer" 
-		p:connection-factory-ref="jedisConnectionFactory"/> -->
-
 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
 		<property name="maxIdle" value="300" />
 		<property name="maxTotal" value="60000" />

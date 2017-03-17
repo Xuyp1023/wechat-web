@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.betterjr.common.utils.UserUtils;
 import com.betterjr.common.web.Servlets;
 
 /**
@@ -96,8 +97,9 @@ public class NoticeController {
      * @return
      */
     @RequestMapping(value = "/setReadNotice", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String setReadNotice(final HttpServletRequest request, final Long id, final Long custNo) {
-        logger.debug("设置公告已读 入参:id=" + id + " custNo=" + custNo);
+    public @ResponseBody String setReadNotice(final HttpServletRequest request, final Long id) {
+        logger.debug("设置公告已读 入参:id=" + id);
+        final Long custNo = UserUtils.getDefCustInfo().getCustNo();
         return exec(() -> noticeService.webSetReadNotice(id, custNo), "设置公告已读  出错", logger);
     }
 
