@@ -23,6 +23,7 @@
     com.betterjr.modules.notice,
     com.betterjr.modules.notification,
     com.betterjr.modules.credit,
+    com.betterjr.modules.ledger,
     com.betterjr.modules.workflow" />
 
 </beans>
