@@ -42,6 +42,7 @@
 				<property name="excludedUrls">
 					<list>
 						<value>/wechatOauth2</value>
+						<value>/Wechat/Platform/toSuccess</value>
 					</list>
 				</property>
 				<property name="pcFailUrl" value="/scf/app/etc/assignCredit.html" />
