@@ -42,7 +42,6 @@
 				<property name="excludedUrls">
 					<list>
 						<value>/wechatOauth2</value>
-						<value>/Wechat/Platform/toSuccess</value>
 					</list>
 				</property>
 				<property name="pcFailUrl" value="/scf/app/etc/assignCredit.html" />
@@ -65,6 +64,7 @@
 						<value>/Wechat/Platform/getJSSignature</value>
 						<value>/Wechat/Platform/getCurrentRole</value>
 						<value>/Wechat/Platform/checkFristTradePass</value>
+						<value>/Wechat/Platform/toSuccess</value>
 
 						<value>/Wechat/wxRequest/dispatcher</value>
 						<value>/Wechat/wxRequest/checkUser</value>
