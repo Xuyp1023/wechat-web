@@ -45,7 +45,8 @@ public class RequestUrlHandler implements UrlHandler {
             final String requestNo = params.get(0);// ?JSESSIONID=" + subject.getSession().getId() + "
             //final ScfRequest request = requestService.findByRequestNo(requestNo);
             final Subject subject = SecurityUtils.getSubject();
-            anUrlControl.setUrl("./wechat/index.html#/finance/detail/finance/" + params.get(0));
+            //anUrlControl.setUrl("./wechat/index.html#/finance/detail/finance/" + params.get(0));
+            anUrlControl.setUrl("./wechat/index.html#/financeBusi/detail/"+params.get(0));
         }
 
         anUrlControl.nextHandler();
