@@ -44,7 +44,7 @@ public class SignUrlHandler implements UrlHandler {
             final List<String> params = anUrlControl.getParam(UrlControl.FUNC_PARAMS);
             final String requestNo = params.get(0);
             //anUrlControl.setUrl("./wechat/index.html#/sign/do/"+params.get(0));
-            anUrlControl.setUrl("./wechat/index.html#/flow/todoList");
+            anUrlControl.setUrl("./wechat/flow.html#/flow/todoList");
         }
 
         anUrlControl.nextHandler();
