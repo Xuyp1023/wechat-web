@@ -1,5 +1,7 @@
 package com.betterjr.modules.acceptbill;
 
+import static com.betterjr.common.web.ControllerExceptionHandler.exec;
+
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -109,5 +111,11 @@ public class WeChatScfAcceptBillController {
                 return scfAcceptBillService.webSaveSingleFileLink(id, fileId);
             }
         }, "保存附件", logger);
+    }
+    
+    @RequestMapping(value = "/saveBillFile", method = RequestMethod.POST)
+    public @ResponseBody String saveContractLedgerFile(Long billId,String fileTypeName,String fileMediaId) {
+        logger.info("微信端-添加票据附件，入参:billId="+ billId+"，fileTypeName="+fileTypeName+"，fileMediaId="+fileMediaId);
+        return exec(() -> scfAcceptBillService.webSaveBillFile(billId,fileTypeName,fileMediaId), "微信端-添加票据附件", logger);
     }
 }
