@@ -130,7 +130,7 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
                         }
                         final UserType ut = UserType.NONE_USER;
                         // 构造匿名用户
-                        final ShiroUser shiroUser = new ShiroUser(ut, 0L, "1X2Y3W4o5m6", user, null, mobileLogin, null, userPassData);
+                        final ShiroUser shiroUser = new ShiroUser(ut, 0L, "1X2Y3W4o5m6", user, null, null, mobileLogin, null, userPassData);
                         shiroUser.addParam("accessToken", at);
                         final byte[] salt = Encodes.decodeHex(saltStr);
 
@@ -154,7 +154,7 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
                             ut = UserType.OPERATOR_ADMIN;
                         }
 
-                        final ShiroUser shiroUser = new ShiroUser(ut, user.getId(), user.getName(), user, certInfo, mobileLogin, contextInfo,
+                        final ShiroUser shiroUser = new ShiroUser(ut, user.getId(), user.getName(), user, null, certInfo, mobileLogin, contextInfo,
                                 userPassData);
                         shiroUser.addParam("accessToken", at);
                         final byte[] salt = Encodes.decodeHex(saltStr);
