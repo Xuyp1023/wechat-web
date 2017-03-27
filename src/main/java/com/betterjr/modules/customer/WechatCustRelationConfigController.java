@@ -59,7 +59,7 @@ public class WechatCustRelationConfigController {
     // 查询临时文件
     @RequestMapping(value = "/findCustAduitTemp", method = RequestMethod.POST)
     public @ResponseBody String findCustAduitTemp(Long relateCustNo) {
-        return exec(() -> custRelationConfigService.webFindCustAduitTempFile(relateCustNo), "查询临时文件", logger);
+        return exec(() -> custRelationConfigService.webFindCustAduitTempFile(relateCustNo,null), "查询临时文件", logger);
     }
     
     /**
@@ -93,7 +93,7 @@ public class WechatCustRelationConfigController {
     @RequestMapping(value = "/addFactorCustRelation", method = RequestMethod.POST)
     public @ResponseBody String addFactorCustRelation(String factorCustType,String wosCustType,String factorCustNoList,String wosCustNoList) {
         logger.info("添加保理方客户关系，入参：custType="+factorCustType+"，wosCustType="+wosCustType+"，factorCustNoList="+factorCustNoList+"，wosCustStr="+wosCustNoList);
-        return exec(() -> custRelationConfigService.webAddFactorCustRelation(factorCustType, wosCustType, factorCustNoList, wosCustNoList), "添加保理方客户关系", logger);
+        return exec(() -> custRelationConfigService.webAddFactorCustRelation(factorCustType, wosCustType, factorCustNoList, wosCustNoList,null), "添加保理方客户关系", logger);
     }
     
     /***
@@ -104,7 +104,7 @@ public class WechatCustRelationConfigController {
     @RequestMapping(value = "/findCustRelateAduitRecord", method = RequestMethod.POST)
     public @ResponseBody String findCustRelateAduitRecord(Long custNo){
         logger.info("入参：custNo:" + custNo);
-        return exec(() -> custRelationConfigService.webFindCustRelateAduitRecord(custNo), "查询审批记录", logger);
+        return exec(() -> custRelationConfigService.webFindCustRelateAduitRecord(custNo,null,null), "查询审批记录", logger);
     }
     
     public Long findCurrentLongCustNo(){
