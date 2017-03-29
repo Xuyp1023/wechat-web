@@ -115,4 +115,10 @@ public class WechatCustRelationConfigController {
         }
         return custNo;
     }
+    
+    // 查询当前客户的类型
+    @RequestMapping(value = "/findCustTypeByLogin", method = RequestMethod.POST)
+    public @ResponseBody String findCustTypeByLogin() {
+        return exec(() -> custRelationConfigService.webFindCustTypeByCustNo(), "查询当前客户的类型", logger);
+    }
 }
