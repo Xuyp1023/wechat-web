@@ -22,6 +22,7 @@
 	                       com.betterjr.modules.invoice;
 	                       com.betterjr.modules.acceptbill;
 	                       com.betterjr.modules.receivable;
+                           com.betterjr.modules.file;
 	                       com.betterjr.modules.request;
 	                       com.betterjr.modules.product;
 	                       com.betterjr.modules.customer;

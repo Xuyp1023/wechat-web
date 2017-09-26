@@ -120,8 +120,8 @@ public class WechatElecAgreementController {
     }
     
     @RequestMapping(value = "/sendValidCode", method = RequestMethod.POST)
-    public @ResponseBody String sendValidCode(String appNo, String custType, String vCode,String tradePwd) {
-        logger.info("发送并验证签署合同的验证码，流水号:" + appNo + " custType:" + custType + " vCode:" + vCode+",tradePwd:"+tradePwd);
+    public @ResponseBody String sendValidCode(String appNo, String custType, String vCode) {
+        logger.info("发送并验证签署合同的验证码，流水号:" + appNo + " custType:" + custType + " vCode:" + vCode);
         try {
             return scfElecAgreementService.webSendValidCode(appNo,custType,vCode);
         }
