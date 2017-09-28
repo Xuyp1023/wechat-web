@@ -9,10 +9,10 @@ package com.betterjr.modules.wechat.handler.url;
 
 import java.util.List;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.betterjr.common.utils.BetterStringUtils;
+import com.betterjr.modules.agreement.IScfElecAgreementService;
+import com.betterjr.modules.agreement.entity.ScfElecAgreement;
 import com.betterjr.modules.wechat.dispatcher.UrlControl;
 
 /**
@@ -20,6 +20,10 @@ import com.betterjr.modules.wechat.dispatcher.UrlControl;
  *
  */
 public class SignUrlHandler implements UrlHandler {
+    
+    @Reference(interfaceClass = IScfElecAgreementService.class)
+    private IScfElecAgreementService agreementService;
+    
     public static final String SIGN_FUNC_CODE = "41";
 
     //private final ScfRequestService requestService;
@@ -43,8 +47,20 @@ public class SignUrlHandler implements UrlHandler {
         if (BetterStringUtils.equals(func, SIGN_FUNC_CODE)) {
             final List<String> params = anUrlControl.getParam(UrlControl.FUNC_PARAMS);
             final String requestNo = params.get(0);
-            //anUrlControl.setUrl("./wechat/index.html#/sign/do/"+params.get(0));
-            anUrlControl.setUrl("./wechat/flow.html#/flow/todoList");
+            
+            ScfElecAgreement agreement = agreementService.findOneElecAgreement(requestNo);
+            if(agreement !=null ){
+                if( "6".equals(agreement.getAgreeType()) || "7".equals(agreement.getAgreeType())){
+                    anUrlControl.setUrl("./wechat/index.html#/sign/do/"+params.get(0));
+                    
+                }else{
+                    
+                    anUrlControl.setUrl("./wechat/flow.html#/flow/todoList");
+                }
+            }else{
+                anUrlControl.setUrl("./wechat/flow.html#/flow/todoList");
+                
+            }
         }
 
         anUrlControl.nextHandler();

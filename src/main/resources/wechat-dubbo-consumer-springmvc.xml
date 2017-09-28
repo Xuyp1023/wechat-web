@@ -18,6 +18,7 @@
     com.betterjr.modules.file,
     com.betterjr.modules.request,
     com.betterjr.modules.product,
+    com.betterjr.modules.wechat.handler.url,
 	com.betterjr.modules.invoice,
 	com.betterjr.modules.customer,
 	com.betterjr.modules.product,
