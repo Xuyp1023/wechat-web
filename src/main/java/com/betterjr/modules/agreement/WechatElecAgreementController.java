@@ -91,7 +91,7 @@ public class WechatElecAgreementController {
     public @ResponseBody String findElecAgreePage(final String appNo) {
         logger.info("生成电子合同的静态页面，流水号：" + appNo);
         try {
-            return scfElecAgreementService.webFindElecAgreePage(appNo);
+            return scfElecAgreementService.webSaveElecAgreeImages(appNo);
         }
         catch (final RpcException btEx) {
             logger.error("生成电子合同的静态页面异常：" + btEx.getMessage());
@@ -125,7 +125,7 @@ public class WechatElecAgreementController {
     }
 
     @RequestMapping(value = "/sendValidCode", method = RequestMethod.POST)
-    public @ResponseBody String sendValidCode(String appNo, String custType, String vCode) {
+    public @ResponseBody String sendValidCode(final String appNo, final String custType, final String vCode) {
         logger.info("发送并验证签署合同的验证码，流水号:" + appNo + " custType:" + custType + " vCode:" + vCode);
         try {
             return scfElecAgreementService.webSendValidCode(appNo, custType, vCode);
