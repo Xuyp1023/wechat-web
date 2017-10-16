@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -193,11 +194,14 @@ public class WechatElecAgreementController {
         }
     }
 
-    @RequestMapping(value = "/downloadAgreeImage", method = { RequestMethod.GET, RequestMethod.POST })
-    public void downloadElecAgreeImage(final HttpServletResponse response, final String appNo, final Long batchNo, final Long id) {
+    @RequestMapping(value = "/downloadAgreeImage/{appNo}/{batchNo}/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    public void downloadElecAgreeImage(final HttpServletResponse response, @PathVariable("appNo") final String appNo,
+            @PathVariable("batchNo") final Long batchNo, @PathVariable("id") final Long id) {
 
         final CustFileItem fileItem = scfElecAgreementService.webFindSignedImage(appNo, batchNo, id);
 
         FileWebClientUtils.fileDownload(dataStoreService, response, fileItem);
+        response.setContentType("image/jpeg");
+        response.setContentLength(fileItem.getFileLength().intValue());
     }
 }
