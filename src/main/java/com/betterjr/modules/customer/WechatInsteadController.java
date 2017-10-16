@@ -31,22 +31,21 @@ public class WechatInsteadController {
     @Reference(interfaceClass = ICustInsteadService.class)
     private ICustInsteadService insteadService;
 
-    
     /**
      * 微信代录申请-申请代录(检查短信校验码)
      */
     @RequestMapping(value = "/wechatAddInsteadApply", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String wechatAddInsteadApply(HttpServletRequest request, final Long id, final String fileList) {
+    public @ResponseBody String wechatAddInsteadApply(HttpServletRequest request, final Long id,
+            final String fileList) {
         final Object openIdObj = Servlets.getSession().getAttribute("wechat_openId");
         if (openIdObj != null) {
             Map<String, Object> anMap = Servlets.getParametersStartingWith(request, "");
             return exec(() -> insteadService.webWechatAddInsteadApply(anMap, id, fileList), "申请代录出错", logger);
-        }
-        else {
+        } else {
             return AjaxObject.newError("申请代录失败,请重新点击开户尝试").toJson();
         }
     }
-    
+
     /**
      * 查询代录申请
      */
@@ -54,7 +53,7 @@ public class WechatInsteadController {
     public @ResponseBody String findInsteadApplyByAccountTmpId(final Long id) {
         return exec(() -> insteadService.webFindInsteadApplyByAccountTmpId(id), "查询代录申请出错", logger);
     }
-    
+
     /**
      * 代录项目 确认通过
      * @return
@@ -64,7 +63,7 @@ public class WechatInsteadController {
         logger.debug("代录项目 确认通过 入参:id=" + id + " reason=" + reason);
         return exec(() -> insteadService.webConfirmPassInsteadRecord(id, reason), "代录项目 确认通过 出错", logger);
     }
-    
+
     /**
      * 代录激活操作
      */
@@ -72,5 +71,5 @@ public class WechatInsteadController {
     public @ResponseBody String saveActiveOpenAccount(final Long id) {
         return exec(() -> insteadService.webSaveActiveOpenAccount(id), "激活出错", logger);
     }
-    
+
 }

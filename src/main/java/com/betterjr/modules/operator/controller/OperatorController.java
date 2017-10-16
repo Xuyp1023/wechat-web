@@ -44,7 +44,7 @@ public class OperatorController {
     @Autowired
     private OperatorDubboClientService custOperatorService;
 
-    @Reference(interfaceClass=ICustInfoService.class)
+    @Reference(interfaceClass = ICustInfoService.class)
     private ICustInfoService custInfoService;
 
     /**
@@ -53,7 +53,7 @@ public class OperatorController {
      * @param anMap
      * @return
      */
-    @RequestMapping(value = "/findOperCustInfo", method = RequestMethod.POST, produces="application/json")
+    @RequestMapping(value = "/findOperCustInfo", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String findOperCustInfo(final HttpServletRequest request) {
         final CustOperatorInfo operator = UserUtils.getOperatorInfo();
         if (operator == null) {
@@ -67,14 +67,13 @@ public class OperatorController {
         return AjaxObject.newOk("用户信息查询成功", info).toJson();
     }
 
-
     /**
      * 取当前用户信息
      *
      * @param anMap
      * @return
      */
-    @RequestMapping(value = "/findOperatorInfo", method = RequestMethod.POST, produces="application/json")
+    @RequestMapping(value = "/findOperatorInfo", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String findOperatorInfo(final HttpServletRequest request) {
         final CustOperatorInfo operator = UserUtils.getOperatorInfo();
         if (operator == null) {

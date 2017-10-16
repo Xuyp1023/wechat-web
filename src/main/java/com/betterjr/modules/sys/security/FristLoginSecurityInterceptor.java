@@ -70,7 +70,8 @@ public class FristLoginSecurityInterceptor implements HandlerInterceptor {
      * javax.servlet.http.HttpServletResponse, java.lang.Object)
      */
     @Override
-    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object anHandler) throws Exception {
+    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response,
+            final Object anHandler) throws Exception {
         final Long startTime = System.currentTimeMillis();
         request.setAttribute("startTime_fristLogin", startTime);
 
@@ -83,13 +84,11 @@ public class FristLoginSecurityInterceptor implements HandlerInterceptor {
             final ShiroUser shiroUser = UserUtils.getPrincipal();
             if (shiroUser.getUserType().equals(UserType.NONE_USER)) {
                 result = true;
-            }
-            else {
+            } else {
                 final CustOperatorInfo operator = UserUtils.getOperatorInfo();
                 if (operator != null) {
                     result = wechatClientService.checkFristLogin(operator.getId());
-                }
-                else {
+                } else {
                     result = true;
                 }
             }
@@ -128,8 +127,8 @@ public class FristLoginSecurityInterceptor implements HandlerInterceptor {
      * javax.servlet.http.HttpServletResponse, java.lang.Object, java.lang.Exception)
      */
     @Override
-    public void afterCompletion(final HttpServletRequest anRequest, final HttpServletResponse anResponse, final Object anHandler,
-            final Exception anEx) throws Exception {
+    public void afterCompletion(final HttpServletRequest anRequest, final HttpServletResponse anResponse,
+            final Object anHandler, final Exception anEx) throws Exception {
 
     }
 

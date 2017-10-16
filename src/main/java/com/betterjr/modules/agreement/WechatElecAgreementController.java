@@ -45,7 +45,8 @@ public class WechatElecAgreementController {
     private CustOperatorDubboClientService custOperatorDubboClientService;
 
     @RequestMapping(value = "/queryElecAgreement", method = RequestMethod.POST)
-    public @ResponseBody String queryElecAgreement(final HttpServletRequest request, final int pageNum, final int pageSize) {
+    public @ResponseBody String queryElecAgreement(final HttpServletRequest request, final int pageNum,
+            final int pageSize) {
         final Map anMap = Servlets.getParametersStartingWith(request, "");
         logger.info("分页查询电子合同, 入参:" + anMap.toString());
         try {
@@ -194,7 +195,8 @@ public class WechatElecAgreementController {
         }
     }
 
-    @RequestMapping(value = "/downloadAgreeImage/{appNo}/{batchNo}/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/downloadAgreeImage/{appNo}/{batchNo}/{id}", method = { RequestMethod.GET,
+            RequestMethod.POST })
     public void downloadElecAgreeImage(final HttpServletResponse response, @PathVariable("appNo") final String appNo,
             @PathVariable("batchNo") final Long batchNo, @PathVariable("id") final Long id) {
 

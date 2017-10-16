@@ -45,8 +45,8 @@ public class WechatAuthenticationFilter extends BaseFormAuthenticationFilter {
     }
 
     @Override
-    public void doFilterInternal(final ServletRequest anRequest, final ServletResponse anResponse, final FilterChain anChain)
-            throws ServletException, IOException {
+    public void doFilterInternal(final ServletRequest anRequest, final ServletResponse anResponse,
+            final FilterChain anChain) throws ServletException, IOException {
         super.doFilterInternal(anRequest, anResponse, anChain);
         final ShiroUser shiroUser = UserUtils.getPrincipal();
         logger.info("wechat --- doFilterInternal -- user:" + (shiroUser == null ? "null" : shiroUser.getUserType()));
@@ -61,8 +61,7 @@ public class WechatAuthenticationFilter extends BaseFormAuthenticationFilter {
         if (request instanceof HttpServletRequest) {
             final HttpServletRequest workRequest = (HttpServletRequest) request;
             tmpIp = Servlets.getRemoteAddr(workRequest);
-        }
-        else {
+        } else {
             tmpIp = "";
         }
         final String username = SignHelper.randomBase64(20);
@@ -87,8 +86,8 @@ public class WechatAuthenticationFilter extends BaseFormAuthenticationFilter {
     }
 
     @Override
-    protected boolean onLoginFailure(final AuthenticationToken token, final AuthenticationException ae, final ServletRequest request,
-            final ServletResponse response) {
+    protected boolean onLoginFailure(final AuthenticationToken token, final AuthenticationException ae,
+            final ServletRequest request, final ServletResponse response) {
 
         final Subject subject = getSubject(request, response);
         if (subject.isAuthenticated() || subject.isRemembered()) {
@@ -98,8 +97,7 @@ public class WechatAuthenticationFilter extends BaseFormAuthenticationFilter {
             catch (final Exception e) {
                 logger.error("Cannot redirect to the default success url", e);
             }
-        }
-        else {
+        } else {
             try {
                 WebUtils.issueRedirect(request, response, failureUrl);
             }
@@ -119,7 +117,8 @@ public class WechatAuthenticationFilter extends BaseFormAuthenticationFilter {
         String tmpKey = request.getParameter("state");
         tmpKey = getSuccessUrl();
         // 检查当前用户
-        final CustWeChatDubboClientService wechatClientService = SpringContextHolder.getBean(CustWeChatDubboClientService.class);
+        final CustWeChatDubboClientService wechatClientService = SpringContextHolder
+                .getBean(CustWeChatDubboClientService.class);
         final CustOperatorInfo operator = UserUtils.getOperatorInfo();
         if (wechatClientService.checkFristLogin(operator.getId())) {
             tmpKey = "/static/wechat/frist.html";
@@ -129,8 +128,8 @@ public class WechatAuthenticationFilter extends BaseFormAuthenticationFilter {
     }
 
     @Override
-    protected boolean onLoginSuccess(final AuthenticationToken token, final Subject subject, final ServletRequest request,
-            final ServletResponse response) throws Exception {
+    protected boolean onLoginSuccess(final AuthenticationToken token, final Subject subject,
+            final ServletRequest request, final ServletResponse response) throws Exception {
         System.out.println("this onLoginSuccess");
         System.out.println(subject);
         super.onLoginSuccess(token, subject, request, response);

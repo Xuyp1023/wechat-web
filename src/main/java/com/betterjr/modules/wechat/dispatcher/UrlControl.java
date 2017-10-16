@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,8 +46,8 @@ public final class UrlControl {
     }
 
     @SuppressWarnings("unchecked")
-    public  <T extends Object> T getParam(final String anKey) {
-        return (T)context.get(anKey);
+    public <T extends Object> T getParam(final String anKey) {
+        return (T) context.get(anKey);
     }
 
     public void setUrl(final String anUrl) {
@@ -58,15 +59,15 @@ public final class UrlControl {
     }
 
     public final void nextHandler() {
-        if (BetterStringUtils.isNotBlank(url)) {
+        if (StringUtils.isNotBlank(url)) {
             logger.debug("wechat dispatcher url: " + url);
             return;
         }
         if (uhandlerIterator.hasNext()) {
             try {
                 uhandlerIterator.next().handle(state, this);
-            } catch (final Exception e) {
             }
+            catch (final Exception e) {}
         }
     }
 }

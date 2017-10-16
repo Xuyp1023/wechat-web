@@ -84,7 +84,8 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
      * 认证回调函数, 登录时调用.
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken authcToken) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(final AuthenticationToken authcToken)
+            throws AuthenticationException {
 
         CustOperatorInfo user = null;
         String passWD = null;
@@ -97,7 +98,8 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
             CustCertInfo certInfo = null;
             if ((authcToken instanceof BetterjrWechatToken) == true) {
                 final BetterjrWechatToken wechatToken = (BetterjrWechatToken) authcToken;
-                final WechatKernel wk = new WechatKernel(wechatService.getMpAccount(), new WechatDefHandler(wechatService), new HashMap<>());
+                final WechatKernel wk = new WechatKernel(wechatService.getMpAccount(),
+                        new WechatDefHandler(wechatService), new HashMap<>());
 
                 final AccessToken at = findAccessToken(wk, wechatToken);
                 saltStr = "985a44369b063938a6a7";
@@ -115,14 +117,13 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
                         final CustWeChatInfo weChatInfo = wechatService.findWechatUserByOpenId(at.getOpenId());
                         if (follower != null) { // 必须找到这个订阅用户
                             if (weChatInfo == null) {
-                                wechatService.saveNewWeChatInfo(wechatService.getAppId(), at.getOpenId(), follower.getSubscribe());
-                            }
-                            else {
+                                wechatService.saveNewWeChatInfo(wechatService.getAppId(), at.getOpenId(),
+                                        follower.getSubscribe());
+                            } else {
                                 weChatInfo.setSubscribeStatus(String.valueOf(follower.getSubscribe()));
                                 wechatService.saveWeChatInfo(weChatInfo);
                             }
-                        }
-                        else {
+                        } else {
                             if (weChatInfo != null) {
                                 weChatInfo.setSubscribeStatus("0");
                                 wechatService.saveWeChatInfo(weChatInfo);
@@ -130,20 +131,22 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
                         }
                         final UserType ut = UserType.NONE_USER;
                         // 构造匿名用户
-                        final ShiroUser shiroUser = new ShiroUser(ut, 0L, "1X2Y3W4o5m6", user, null, null, mobileLogin, null, userPassData);
+                        final ShiroUser shiroUser = new ShiroUser(ut, 0L, "1X2Y3W4o5m6", user, null, null, mobileLogin,
+                                null, userPassData);
                         shiroUser.addParam("accessToken", at);
                         final byte[] salt = Encodes.decodeHex(saltStr);
 
-                        logger.info("wechat --- 构建匿名用户 -- user:" + (shiroUser == null ? "null" : shiroUser.getUserType()));
+                        logger.info(
+                                "wechat --- 构建匿名用户 -- user:" + (shiroUser == null ? "null" : shiroUser.getUserType()));
                         return new SimpleAuthenticationInfo(shiroUser, passWD, ByteSource.Util.bytes(salt), getName());
-                    }
-                    else {
+                    } else {
                         contextInfo = userService.saveFormLogin(user);
                         certInfo = certService.findFirstCertInfoByOperOrg(user.getOperOrg());
                         wechatToken.setUsername(user.getName());
 
                         userPassData = passService.findPassAndSalt(user.getId(),
-                                new String[] { CustPasswordType.PERSON_TRADE.getPassType(), CustPasswordType.ORG_TRADE.getPassType() });
+                                new String[] { CustPasswordType.PERSON_TRADE.getPassType(),
+                                        CustPasswordType.ORG_TRADE.getPassType() });
                         if (user.getStatus().equals("1") == false) {
                             throw new DisabledAccountException("操作员被要求暂停业务或者已经被注销");
                         }
@@ -154,12 +157,13 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
                             ut = UserType.OPERATOR_ADMIN;
                         }
 
-                        final ShiroUser shiroUser = new ShiroUser(ut, user.getId(), user.getName(), user, null, certInfo, mobileLogin, contextInfo,
-                                userPassData);
+                        final ShiroUser shiroUser = new ShiroUser(ut, user.getId(), user.getName(), user, null,
+                                certInfo, mobileLogin, contextInfo, userPassData);
                         shiroUser.addParam("accessToken", at);
                         final byte[] salt = Encodes.decodeHex(saltStr);
 
-                        logger.info("wechat --- 正常登陆用户 -- user:" + (shiroUser == null ? "null" : shiroUser.getUserType()));
+                        logger.info(
+                                "wechat --- 正常登陆用户 -- user:" + (shiroUser == null ? "null" : shiroUser.getUserType()));
                         return new SimpleAuthenticationInfo(shiroUser, passWD, ByteSource.Util.bytes(salt), getName());
                     }
                 }
@@ -182,11 +186,12 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
     private AccessToken findAccessToken(final WechatKernel anWk, final BetterjrWechatToken anWechatToken) {
         final String sysMode = wechatService.getSysMode();
         AccessToken at = null;
-        switch(sysMode) {
+        switch (sysMode) {
         case "dev":
             at = createTestAccessToken(anWechatToken);
             break;
-        default: at = anWk.findUserAuth2(anWechatToken.getTicket());
+        default:
+            at = anWk.findUserAuth2(anWechatToken.getTicket());
         }
 
         return at;
@@ -254,10 +259,9 @@ public class WechatAuthorizingRealm extends AuthorizingRealm {
 
         final SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         if (UserType.NONE_USER.equals(shiroUser.getUserType()) == true) {
-            info.addRole("NONE_USER");  // 匿名用户
-        }
-        else {
-            info.addRole("NORM_USER");  // 普通用户
+            info.addRole("NONE_USER"); // 匿名用户
+        } else {
+            info.addRole("NORM_USER"); // 普通用户
             for (final String userRule : shiroUser.fingUserRule()) {
                 logger.warn("this use attach rule is :" + userRule);
                 info.addRole(userRule);

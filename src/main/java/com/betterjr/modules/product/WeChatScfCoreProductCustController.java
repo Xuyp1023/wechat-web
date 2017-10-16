@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.betterjr.common.web.ControllerExceptionHandler;
-import com.betterjr.common.web.Servlets;
 import com.betterjr.common.web.ControllerExceptionHandler.ExceptionHandler;
+import com.betterjr.common.web.Servlets;
 import com.betterjr.modules.acceptbill.WeChatScfAcceptBillController;
 import com.betterjr.modules.productconfig.IScfProductConfigService;
 import com.betterjr.modules.supplieroffer.IScfCoreProductCustService;
@@ -25,16 +25,14 @@ import com.betterjr.modules.supplieroffer.IScfCoreProductCustService;
 @RequestMapping(value = "/WeChat/Scf/coreProductCust")
 public class WeChatScfCoreProductCustController {
 
-    
     private static final Logger logger = LoggerFactory.getLogger(WeChatScfAcceptBillController.class);
-    
-    @Reference(interfaceClass =IScfCoreProductCustService.class)
+
+    @Reference(interfaceClass = IScfCoreProductCustService.class)
     private IScfCoreProductCustService productService;
-    
+
     @Reference(interfaceClass = IScfProductConfigService.class)
     private IScfProductConfigService productConfigService;
-    
-    
+
     /**
      * 查询核心企业分配给供应商的保理产品
      * @param request
@@ -43,16 +41,17 @@ public class WeChatScfCoreProductCustController {
      * @return
      */
     @RequestMapping(value = "/queryCanUseProduct", method = RequestMethod.POST)
-    public @ResponseBody String queryCanUseProduct(HttpServletRequest request,Long custNo,Long coreCustNo) {
+    public @ResponseBody String queryCanUseProduct(HttpServletRequest request, Long custNo, Long coreCustNo) {
         Map<String, Object> anMap = Servlets.getParametersStartingWith(request, "");
         logger.info("产品查询,入参：" + anMap.toString());
         return ControllerExceptionHandler.exec(new ExceptionHandler() {
+            @Override
             public String handle() {
                 return productService.webQueryCanUseProduct(custNo, coreCustNo);
             }
         }, "产品查询失败", logger);
     }
-    
+
     /**
      * 查询保理产品下详细的信息
      * @param request

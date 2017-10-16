@@ -9,6 +9,7 @@ package com.betterjr.modules.wechat.handler.url;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
@@ -34,6 +35,7 @@ public class MenuUrlHandler implements UrlHandler {
     private static final String MENU_FINANCING = "1";
     private static final String MENU_INVESTMENT = "2";
     private static final String MENU_SELFINFO = "3";
+
     /*
      * (non-Javadoc)
      *
@@ -43,7 +45,7 @@ public class MenuUrlHandler implements UrlHandler {
     public void handle(final String anState, final UrlControl anUrlControl) throws Exception {
         final String func = anUrlControl.getParam(UrlControl.FUNC_CODE);
 
-        if (BetterStringUtils.equals(func, MENU_FUNC_CODE)) {
+        if (StringUtils.equals(func, MENU_FUNC_CODE)) {
             final List<String> params = anUrlControl.getParam(UrlControl.FUNC_PARAMS);
             final Subject subject = SecurityUtils.getSubject();
 

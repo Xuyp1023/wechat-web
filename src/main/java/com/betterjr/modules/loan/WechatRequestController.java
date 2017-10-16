@@ -24,11 +24,10 @@ public class WechatRequestController {
 
     @Reference(interfaceClass = IScfWechatRequestService.class)
     private IScfWechatRequestService billRequestService;
-    
+
     @Reference(interfaceClass = IScfRequestService.class)
     private IScfRequestService requestService;
 
-    
     @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
     public @ResponseBody String addBillRequest(HttpServletRequest request) {
         Map<String, Object> map = Servlets.getParametersStartingWith(request, "");
@@ -44,7 +43,7 @@ public class WechatRequestController {
         }
 
     }
-    
+
     @RequestMapping(value = "/requestByOffer", method = RequestMethod.POST)
     public @ResponseBody String requestByOffer(HttpServletRequest request, String offerId) {
         Map<String, Object> map = Servlets.getParametersStartingWith(request, "");
@@ -63,7 +62,7 @@ public class WechatRequestController {
     @RequestMapping(value = "/queryRequestList", method = RequestMethod.POST)
     public @ResponseBody String queryBillRequestList(HttpServletRequest request, int flag, int pageNum, int pageSize) {
         Map<String, Object> map = Servlets.getParametersStartingWith(request, "");
-        String[] queryTerm = new String[] {"tradeStatus"};
+        String[] queryTerm = new String[] { "tradeStatus" };
         map = Collections3.filterMap(map, queryTerm);
         logger.info("查询票据融资申请，入参:" + map.toString());
 
@@ -76,7 +75,7 @@ public class WechatRequestController {
         }
 
     }
-    
+
     @RequestMapping(value = "/findRequestByBill", method = RequestMethod.POST)
     public @ResponseBody String findRequestByBill(HttpServletRequest request, String billId) {
         Map<String, Object> map = Servlets.getParametersStartingWith(request, "");
@@ -91,7 +90,7 @@ public class WechatRequestController {
         }
 
     }
-    
+
     @RequestMapping(value = "/findRequestByNo", method = RequestMethod.POST)
     public @ResponseBody String findRequestByNo(HttpServletRequest request, String requestNo) {
         Map<String, Object> map = Servlets.getParametersStartingWith(request, "");
@@ -106,16 +105,15 @@ public class WechatRequestController {
         }
 
     }
-    
+
     private void fillLoginCustNo(Map<String, Object> anMap) {
-        if(UserUtils.supplierUser() || UserUtils.sellerUser()){
+        if (UserUtils.supplierUser() || UserUtils.sellerUser()) {
             anMap.put("custNo", UserUtils.getDefCustInfo().getCustNo().toString());
-        }
-        else if(UserUtils.factorUser()){
+        } else if (UserUtils.factorUser()) {
             anMap.put("factorNo", UserUtils.getDefCustInfo().getCustNo().toString());
-        }else{
+        } else {
             anMap.put("coreCustNo", UserUtils.getDefCustInfo().getCustNo().toString());
         }
     }
-    
+
 }

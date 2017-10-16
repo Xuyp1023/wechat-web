@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
@@ -31,7 +32,7 @@ public class BeginUrlHandler implements UrlHandler {
      */
     @Override
     public void handle(final String anState, final UrlControl anUrlControl) throws Exception {
-        if (BetterStringUtils.isBlank(anState)) {
+        if (StringUtils.isBlank(anState)) {
             final Subject subject = SecurityUtils.getSubject();
             anUrlControl.setUrl("./wechat/index.html#/home");
             return;

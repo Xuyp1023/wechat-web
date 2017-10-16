@@ -13,7 +13,6 @@ import com.betterjr.common.web.AjaxObject;
 import com.betterjr.modules.document.ICustFileService;
 import com.betterjr.modules.document.entity.CustFileItem;
 
-
 @Controller
 @RequestMapping(value = "/WeChat/Cust/File")
 public class WeChatCustFileController {
@@ -22,7 +21,7 @@ public class WeChatCustFileController {
 
     @Reference(interfaceClass = ICustFileService.class)
     private ICustFileService fileItemService;
-    
+
     /**
      * 文件列表
      * 

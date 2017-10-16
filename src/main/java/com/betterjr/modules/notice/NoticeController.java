@@ -42,7 +42,8 @@ public class NoticeController {
      * @return
      */
     @RequestMapping(value = "/queryUnreadNotice", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String queryUnreadNotice(final HttpServletRequest request, final int flag, final int pageNum, final int pageSize) {
+    public @ResponseBody String queryUnreadNotice(final HttpServletRequest request, final int flag, final int pageNum,
+            final int pageSize) {
         final Map<String, Object> anParam = Servlets.getParametersStartingWith(request, "");
         logger.debug("未读公告列表-查询 入参:anParam=" + anParam);
         return exec(() -> noticeService.webQueryUnreadNotice(anParam, flag, pageNum, pageSize), "未读公告列表-查询 出错", logger);
@@ -54,7 +55,8 @@ public class NoticeController {
      * @return
      */
     @RequestMapping(value = "/queryReadNotice", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String queryReadNotice(final HttpServletRequest request, final int flag, final int pageNum, final int pageSize) {
+    public @ResponseBody String queryReadNotice(final HttpServletRequest request, final int flag, final int pageNum,
+            final int pageSize) {
         final Map<String, Object> anParam = Servlets.getParametersStartingWith(request, "");
         logger.debug("已读公告列表-查询 入参:anParam=" + anParam);
         return exec(() -> noticeService.webQueryReadNotice(anParam, flag, pageNum, pageSize), "已读公告列表-查询 出错", logger);
@@ -109,7 +111,8 @@ public class NoticeController {
      * @return
      */
     @RequestMapping(value = "/queryNotice", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String queryNotice(final HttpServletRequest request, final int flag, final int pageNum, final int pageSize) {
+    public @ResponseBody String queryNotice(final HttpServletRequest request, final int flag, final int pageNum,
+            final int pageSize) {
         final Map<String, Object> anParam = Servlets.getParametersStartingWith(request, "");
         logger.debug("已读公告列表-查询 入参:anParam=" + anParam);
         return exec(() -> noticeService.webQueryNotice(anParam, flag, pageNum, pageSize), "已读公告列表-查询 出错", logger);

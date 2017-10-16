@@ -41,7 +41,7 @@ public class WechatPlatformController {
     private static final Logger logger = LoggerFactory.getLogger(WechatPlatformController.class);
 
     @Autowired
-    private DataStoreService  dataStoreService;
+    private DataStoreService dataStoreService;
 
     @Resource
     private CustWeChatDubboClientService wechatDubboService;
@@ -74,6 +74,7 @@ public class WechatPlatformController {
             return AjaxObject.newError("获取 AppId失败").toJson();
         }
     }
+
     /**
      * 获取JSTicket Signature
      */
@@ -144,7 +145,8 @@ public class WechatPlatformController {
         final String appId = wechatDubboService.getAppId();
         final String wechatUrl = wechatDubboService.getWechatUrl();
         if (openIdObj != null) {
-            final String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + wechatUrl + "/wechatOauth2&response_type=code&scope=snsapi_base&state=10,1#wechat_redirect";
+            final String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri="
+                    + wechatUrl + "/wechatOauth2&response_type=code&scope=snsapi_base&state=10,1#wechat_redirect";
             resp.sendRedirect(url);
         }
     }
@@ -155,7 +157,8 @@ public class WechatPlatformController {
         final String appId = wechatDubboService.getAppId();
         final String wechatUrl = wechatDubboService.getWechatUrl();
         if (openIdObj != null) {
-            final String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + wechatUrl + "/wechatOauth2&response_type=code&scope=snsapi_base&state=10,1#wechat_redirect";
+            final String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri="
+                    + wechatUrl + "/wechatOauth2&response_type=code&scope=snsapi_base&state=10,1#wechat_redirect";
             resp.sendRedirect(url);
         }
     }

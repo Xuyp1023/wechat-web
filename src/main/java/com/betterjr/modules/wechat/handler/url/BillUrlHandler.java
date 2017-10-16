@@ -9,6 +9,8 @@ package com.betterjr.modules.wechat.handler.url;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.betterjr.common.service.SpringContextHolder;
 import com.betterjr.common.utils.BetterStringUtils;
 import com.betterjr.modules.acceptbill.dubboclient.WeChatScfAcceptBillDubboClientService;
@@ -21,14 +23,13 @@ import com.betterjr.modules.wechat.dispatcher.UrlControl;
 public class BillUrlHandler implements UrlHandler {
     public static final String BILL_FUNC_CODE = "20";
 
-
     public final WeChatScfAcceptBillDubboClientService acceptBillService;
 
     /**
      *
      */
     public BillUrlHandler() {
-        //     billService = SpringContextHolder.getBean(ScfAcceptBillService.class);
+        // billService = SpringContextHolder.getBean(ScfAcceptBillService.class);
         acceptBillService = SpringContextHolder.getBean(WeChatScfAcceptBillDubboClientService.class);
     }
 
@@ -41,20 +42,20 @@ public class BillUrlHandler implements UrlHandler {
     public void handle(final String anState, final UrlControl anUrlControl) throws Exception {
         final String func = anUrlControl.getParam(UrlControl.FUNC_CODE);
 
-        if (BetterStringUtils.equals(func, BILL_FUNC_CODE)) {
+        if (StringUtils.equals(func, BILL_FUNC_CODE)) {
             final List<String> params = anUrlControl.getParam(UrlControl.FUNC_PARAMS);
 
             if (params.size() == 1) {
                 try {
                     final Long billId = Long.valueOf(params.get(0));
                     final String billStatus = acceptBillService.findBillStatus(billId);
-                    if (BetterStringUtils.equals(billStatus, "2") == false) {
+                    if (StringUtils.equals(billStatus, "2") == false) {
                         anUrlControl.setUrl("./wechat/index.html#/bill/detail/" + params.get(0));
-                    }
-                    else {
+                    } else {
                         anUrlControl.setUrl("./wechat/index.html#/finance/detail/bill/" + params.get(0));
                     }
-                } catch (final Exception e) {
+                }
+                catch (final Exception e) {
                     anUrlControl.setUrl("./wechat/index.html#/bill");
                 }
             }
