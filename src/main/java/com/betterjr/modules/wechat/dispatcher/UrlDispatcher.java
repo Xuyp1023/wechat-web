@@ -28,13 +28,13 @@ public final class UrlDispatcher {
     private static final List<UrlHandler> SYS_HANDLER = new ArrayList<UrlHandler>();
 
     static {
-        SYS_HANDLER.add(new BeginUrlHandler());  // 先将 state分解
+        SYS_HANDLER.add(new BeginUrlHandler()); // 先将 state分解
 
-        SYS_HANDLER.add(new MenuUrlHandler());  // 处理菜单
-        SYS_HANDLER.add(new BillUrlHandler());  // 处理票据
-        SYS_HANDLER.add(new RequestUrlHandler());   // 处理融资申请
-        SYS_HANDLER.add(new InquiryUrlHandler());   // 处理报价申请
-        SYS_HANDLER.add(new SignUrlHandler());   // 处理报价申请
+        SYS_HANDLER.add(new MenuUrlHandler()); // 处理菜单
+        SYS_HANDLER.add(new BillUrlHandler()); // 处理票据
+        SYS_HANDLER.add(new RequestUrlHandler()); // 处理融资申请
+        SYS_HANDLER.add(new InquiryUrlHandler()); // 处理报价申请
+        SYS_HANDLER.add(new SignUrlHandler()); // 处理报价申请
 
         SYS_HANDLER.add(new EndUrlHandler());
     }
@@ -51,6 +51,5 @@ public final class UrlDispatcher {
 
         return urlControl.getUrl();
     }
-
 
 }

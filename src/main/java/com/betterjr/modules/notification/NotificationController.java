@@ -41,10 +41,12 @@ public class NotificationController {
      * @return
      */
     @RequestMapping(value = "/queryUnreadNotification", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String queryUnreadNotification(final HttpServletRequest request, final int flag, final int pageNum, final int pageSize) {
+    public @ResponseBody String queryUnreadNotification(final HttpServletRequest request, final int flag,
+            final int pageNum, final int pageSize) {
         final Map<String, Object> anParam = Servlets.getParametersStartingWith(request, "");
         logger.debug("未读消息列表-查询 入参:anParam=" + anParam);
-        return exec(() -> notificationService.webQueryUnreadNotification(anParam, flag, pageNum, pageSize), "未读消息列表-查询 出错", logger);
+        return exec(() -> notificationService.webQueryUnreadNotification(anParam, flag, pageNum, pageSize),
+                "未读消息列表-查询 出错", logger);
     }
 
     /**
@@ -53,10 +55,12 @@ public class NotificationController {
      * @return
      */
     @RequestMapping(value = "/queryReadNotification", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String queryReadNotification(final HttpServletRequest request, final int flag, final int pageNum, final int pageSize) {
+    public @ResponseBody String queryReadNotification(final HttpServletRequest request, final int flag,
+            final int pageNum, final int pageSize) {
         final Map<String, Object> anParam = Servlets.getParametersStartingWith(request, "");
         logger.debug("已读消息列表-查询 入参:anParam=" + anParam);
-        return exec(() -> notificationService.webQueryReadNotification(anParam, flag, pageNum, pageSize), "已读消息列表-查询 出错", logger);
+        return exec(() -> notificationService.webQueryReadNotification(anParam, flag, pageNum, pageSize),
+                "已读消息列表-查询 出错", logger);
     }
 
     /**

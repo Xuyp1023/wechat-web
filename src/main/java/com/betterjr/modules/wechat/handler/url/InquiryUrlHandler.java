@@ -9,8 +9,7 @@ package com.betterjr.modules.wechat.handler.url;
 
 import java.util.List;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
+import org.apache.commons.lang3.StringUtils;
 
 import com.betterjr.common.utils.BetterStringUtils;
 import com.betterjr.modules.wechat.dispatcher.UrlControl;
@@ -22,13 +21,13 @@ import com.betterjr.modules.wechat.dispatcher.UrlControl;
 public class InquiryUrlHandler implements UrlHandler {
     public static final String INQUIRY_FUNC_CODE = "40";
 
-    //private final ScfRequestService requestService;
+    // private final ScfRequestService requestService;
 
     /**
      *
      */
     public InquiryUrlHandler() {
-        //    requestService = SpringContextHolder.getBean(ScfRequestService.class);
+        // requestService = SpringContextHolder.getBean(ScfRequestService.class);
     }
 
     /*
@@ -40,9 +39,9 @@ public class InquiryUrlHandler implements UrlHandler {
     public void handle(final String anState, final UrlControl anUrlControl) throws Exception {
         final String func = anUrlControl.getParam(UrlControl.FUNC_CODE);
 
-        if (BetterStringUtils.equals(func, INQUIRY_FUNC_CODE)) {
+        if (StringUtils.equals(func, INQUIRY_FUNC_CODE)) {
             final List<String> params = anUrlControl.getParam(UrlControl.FUNC_PARAMS);
-                anUrlControl.setUrl("./wechat/index.html#/inquiry/detail/" + params.get(0));
+            anUrlControl.setUrl("./wechat/index.html#/inquiry/detail/" + params.get(0));
         }
 
         anUrlControl.nextHandler();

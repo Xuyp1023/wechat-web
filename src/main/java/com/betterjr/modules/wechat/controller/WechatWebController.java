@@ -39,7 +39,8 @@ public class WechatWebController {
     private CustWeChatDubboClientService wechatDubboService;
 
     protected WechatKernel initKernel(final Map<String, String> anMap) {
-        final WechatKernel wk = new WechatKernel(wechatDubboService.getMpAccount(), new WechatDefHandler(wechatDubboService), anMap);
+        final WechatKernel wk = new WechatKernel(wechatDubboService.getMpAccount(),
+                new WechatDefHandler(wechatDubboService), anMap);
         return wk;
     }
 
@@ -59,8 +60,7 @@ public class WechatWebController {
         String respmsg = "success";
         if ("GET".equals(req.getMethod())) {
             respmsg = wk.check();
-        }
-        else {
+        } else {
             respmsg = wk.handle(req.getInputStream());
         }
         // 输出回复消息
@@ -73,19 +73,19 @@ public class WechatWebController {
      * 检查用户
      */
     @RequestMapping(value = "/checkUser", method = { RequestMethod.POST, RequestMethod.GET })
-    public @ResponseBody String checkUser(final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
+    public @ResponseBody String checkUser(final HttpServletRequest req, final HttpServletResponse resp)
+            throws IOException {
         final ShiroUser shiroUser = UserUtils.getPrincipal();
         if (shiroUser != null) {
             final CustOperatorInfo operator = UserUtils.getOperatorInfo();
             if (UserType.NONE_USER.equals(shiroUser.getUserType()) == true) {
                 return AjaxObject.newOk("检查成功", 2).toJson();
-            } else if (operator != null){
+            } else if (operator != null) {
                 return AjaxObject.newOk("检查成功", 1).toJson();
             }
         }
         return AjaxObject.newOk("检查成功", 0).toJson();
     }
-
 
     /**
      * 与微信服务器互动
@@ -105,10 +105,10 @@ public class WechatWebController {
         }
         final AccessToken at = wk.findUserAuth2(map.get("code"));
         logger.debug("wxOauth2 AccessToken" + at);
-
+    
         if (BetterStringUtils.isNotBlank(at.getOpenId())) {
             Servlets.getSession().setAttribute("wechat_openId", at.getOpenId());
-
+    
             final String state = req.getParameter("state");
             String url = UrlDispatcher.dispatch(state);
             final CustWeChatInfo wechatUser = wechatDubboService.findWechatUserByOpenId(at.getOpenId());

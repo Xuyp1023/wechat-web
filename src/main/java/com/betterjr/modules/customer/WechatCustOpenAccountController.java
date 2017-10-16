@@ -26,7 +26,6 @@ public class WechatCustOpenAccountController {
     @Reference(interfaceClass = ICustOpenAccountService.class)
     private ICustOpenAccountService custOpenAccountService;
 
-
     private static final Logger logger = LoggerFactory.getLogger(WechatCustOpenAccountController.class);
 
     /**
@@ -37,25 +36,26 @@ public class WechatCustOpenAccountController {
         logger.info("检查申请机构名称是否存在,入参: " + custName);
         return exec(() -> custOpenAccountService.webCheckCustExistsByCustName(custName), "检查申请机构名称是否存在失败", logger);
     }
-    
+
     /**
      * 检查组织机构代码证是否存在
      */
     @RequestMapping(value = "/checkCustExistsByIdentNo", method = RequestMethod.POST)
-    public @ResponseBody String checkCustExistsByIdentNo(String identNo){
+    public @ResponseBody String checkCustExistsByIdentNo(String identNo) {
         logger.info("检查组织机构代码证是否存在,入参: " + identNo);
         return exec(() -> custOpenAccountService.webCheckCustExistsByIdentNo(identNo), "检查组织机构代码证是否存在失败", logger);
     }
-    
+
     /**
      * 检查营业执照号码是否存在
      */
     @RequestMapping(value = "/checkCustExistsByBusinLicence", method = RequestMethod.POST)
     public @ResponseBody String checkCustExistsByBusinLicence(String businLicence) {
         logger.info("检查营业执照号码是否存在,入参: " + businLicence);
-        return exec(() -> custOpenAccountService.webCheckCustExistsByBusinLicence(businLicence), "检查营业执照号码是否存在失败", logger);
+        return exec(() -> custOpenAccountService.webCheckCustExistsByBusinLicence(businLicence), "检查营业执照号码是否存在失败",
+                logger);
     }
-    
+
     /**
      * 检查银行账号是否存在
      */
@@ -64,7 +64,7 @@ public class WechatCustOpenAccountController {
         logger.info("检查银行账号是否存在,入参: " + bankAccount);
         return exec(() -> custOpenAccountService.webCheckCustExistsByBankAccount(bankAccount), "检查银行账号是否存在失败", logger);
     }
-    
+
     /**
      * 检查电子邮箱是否存在
      */
@@ -73,7 +73,7 @@ public class WechatCustOpenAccountController {
         logger.info("检查电子邮箱是否存在,入参: " + email);
         return exec(() -> custOpenAccountService.webCheckCustExistsByEmail(email), "检查电子邮箱是否存在失败", logger);
     }
-    
+
     /**
      * 检查银行账号是否存在
      */
@@ -82,7 +82,7 @@ public class WechatCustOpenAccountController {
         logger.info("检查手机号码是否存在,入参: " + mobileNo);
         return exec(() -> custOpenAccountService.webCheckCustExistsByMobileNo(mobileNo), "检查手机号码是否存在失败", logger);
     }
-    
+
     /**
      * 客户开户资料暂存
      */
@@ -98,7 +98,7 @@ public class WechatCustOpenAccountController {
         }
         return AjaxObject.newError("开户失败").toJson();
     }
-    
+
     /**
      * 微信查询开户资料
      */
@@ -116,21 +116,22 @@ public class WechatCustOpenAccountController {
             return AjaxObject.newError("获取开户信息失败").toJson();
         }
     }
-    
+
     /**
      * 开户资料附件保存
      */
     @RequestMapping(value = "/saveSingleFileLink", method = RequestMethod.POST)
     public @ResponseBody String saveSingleFileLink(Long id, final String fileTypeName, final String fileMediaId) {
-        return exec(() -> custOpenAccountService.webSaveSingleFileLink(id, fileTypeName, fileMediaId), "开户资料附件保存", logger);
+        return exec(() -> custOpenAccountService.webSaveSingleFileLink(id, fileTypeName, fileMediaId), "开户资料附件保存",
+                logger);
     }
-    
+
     /**
      * 根据batchNo生成对应文件类型Map Json对象(微信使用)
      */
     @RequestMapping(value = "/findAccountFileByBatChNo", method = RequestMethod.POST)
     public @ResponseBody String findAccountFileByBatChNo(Long batchNo) {
-        logger.info("附件查询,入参：" + batchNo );
+        logger.info("附件查询,入参：" + batchNo);
         try {
 
             return custOpenAccountService.webFindAccountFileByBatChNo(batchNo);
@@ -147,7 +148,7 @@ public class WechatCustOpenAccountController {
             return AjaxObject.newError("附件查询失败").toJson();
         }
     }
-    
+
     /**
      * 微信发送手机验证码
      */
@@ -155,7 +156,7 @@ public class WechatCustOpenAccountController {
     public @ResponseBody String sendValidMessage(String mobileNo) {
         return exec(() -> custOpenAccountService.webSendValidMessage(mobileNo), "发送手机短信验证码", logger);
     }
-    
+
     /**
      * 删除附件信息
      */
@@ -163,7 +164,7 @@ public class WechatCustOpenAccountController {
     public @ResponseBody String deleteSingleFile(Long id) {
         return exec(() -> custOpenAccountService.webDeleteSingleFile(id), "删除附件", logger);
     }
-    
+
     /**
      * 微信查询开户成功后资料
      * --不能直接通过wechat标识去查询tmp表，因为若是微信绑定已开户账户，则tmp表中wechat标识为空--

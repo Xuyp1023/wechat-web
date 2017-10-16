@@ -44,37 +44,39 @@ public class WechatWorkFlowController {
         return exec(() -> workFlowService.webQueryCurrentTaskCount(), "查询待办任务数量失败", logger);
     }
 
-
     @RequestMapping(value = "/queryCurrentTask", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String queryCurrentTask(final HttpServletRequest request, final int flag, final int pageNum, final int pageSize) {
+    public @ResponseBody String queryCurrentTask(final HttpServletRequest request, final int flag, final int pageNum,
+            final int pageSize) {
         logger.debug("查询待办任务");
         final Map<String, Object> param = Servlets.getParametersStartingWith(request, "");
         return exec(() -> workFlowService.webQueryCurrentTask(pageNum, pageSize, param), "查询待办任务失败", logger);
     }
 
     @RequestMapping(value = "/queryHistoryTask", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String queryHistoryTask(final HttpServletRequest request, final int flag, final int pageNum, final int pageSize) {
+    public @ResponseBody String queryHistoryTask(final HttpServletRequest request, final int flag, final int pageNum,
+            final int pageSize) {
         logger.debug("查询已办任务");
         final Map<String, Object> param = Servlets.getParametersStartingWith(request, "");
         return exec(() -> workFlowService.webQueryHistoryTask(pageNum, pageSize, param), "查询已办任务失败", logger);
     }
 
     @RequestMapping(value = "/queryMonitorTask", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String queryMonitorTask(final HttpServletRequest request, final long custNo, final int flag, final int pageNum,
-            final int pageSize) {
+    public @ResponseBody String queryMonitorTask(final HttpServletRequest request, final long custNo, final int flag,
+            final int pageNum, final int pageSize) {
         logger.debug("查询监控任务");
         final Map<String, Object> param = Servlets.getParametersStartingWith(request, "");
         return exec(() -> workFlowService.webQueryMonitorTask(custNo, pageNum, pageSize, param), "查询监控任务失败", logger);
     }
 
     @RequestMapping(value = "/startWorkFlow", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String startWorkFlow(final HttpServletRequest request, final String workFlowName, final Long custNo) {
+    public @ResponseBody String startWorkFlow(final HttpServletRequest request, final String workFlowName,
+            final Long custNo) {
         logger.debug("启动流程 workFlowName=" + workFlowName + "  custNo=" + custNo);
         final Map<String, Object> param = Servlets.getParametersStartingWith(request, "");
         return exec(() -> workFlowService.webStartWorkFlow(workFlowName, custNo, param), "启动流程失败", logger);
     }
 
-    @MetaData(acccessType={WebAccessType.ORG_MOBILE_PASS,WebAccessType.ORG_PC}, value = "passWorkFlow")
+    @MetaData(acccessType = { WebAccessType.ORG_MOBILE_PASS, WebAccessType.ORG_PC }, value = "passWorkFlow")
     @RequestMapping(value = "/passWorkFlow", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String passWorkFlow(final HttpServletRequest request, final String taskId) {
         logger.debug("审批通过任务");
@@ -82,7 +84,7 @@ public class WechatWorkFlowController {
         return exec(() -> workFlowService.webPassWorkFlow(taskId, param), "审批通过任务失败", logger);
     }
 
-    @MetaData(acccessType={WebAccessType.ORG_MOBILE_PASS,WebAccessType.ORG_PC}, value = "rejectWorkFlow")
+    @MetaData(acccessType = { WebAccessType.ORG_MOBILE_PASS, WebAccessType.ORG_PC }, value = "rejectWorkFlow")
     @RequestMapping(value = "/rejectWorkFlow", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String rejectWorkFlow(final HttpServletRequest request, final String taskId) {
         logger.debug("审批驳回任务");
@@ -90,7 +92,7 @@ public class WechatWorkFlowController {
         return exec(() -> workFlowService.webRejectWorkFlow(taskId, param), "审批驳回任务失败", logger);
     }
 
-    @MetaData(acccessType={WebAccessType.ORG_MOBILE_PASS,WebAccessType.ORG_PC}, value = "handleWorkFlow")
+    @MetaData(acccessType = { WebAccessType.ORG_MOBILE_PASS, WebAccessType.ORG_PC }, value = "handleWorkFlow")
     @RequestMapping(value = "/handleWorkFlow", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String handleWorkFlow(final HttpServletRequest request, final String taskId) {
         logger.debug("处理经办任务");
@@ -98,7 +100,7 @@ public class WechatWorkFlowController {
         return exec(() -> workFlowService.webHandleWorkFlow(taskId, param), "处理经办任务失败", logger);
     }
 
-    @MetaData(acccessType={WebAccessType.ORG_MOBILE_PASS,WebAccessType.ORG_PC}, value = "cancelWorkFlow")
+    @MetaData(acccessType = { WebAccessType.ORG_MOBILE_PASS, WebAccessType.ORG_PC }, value = "cancelWorkFlow")
     @RequestMapping(value = "/cancelWorkFlow", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody String cancelWorkFlow(final HttpServletRequest request, final String taskId) {
         logger.debug("作废流程");
@@ -114,8 +116,8 @@ public class WechatWorkFlowController {
     }
 
     @RequestMapping(value = "/queryAuditRecord", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody String queryAuditRecord(final HttpServletRequest request, final String businessId, final int flag, final int pageNum,
-            final int pageSize) {
+    public @ResponseBody String queryAuditRecord(final HttpServletRequest request, final String businessId,
+            final int flag, final int pageNum, final int pageSize) {
         logger.debug("查询审批记录");
         return exec(() -> workFlowService.webQueryAudit(businessId, flag, pageNum, pageSize), "查询审批记录失败", logger);
     }

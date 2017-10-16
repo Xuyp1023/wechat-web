@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -38,12 +39,14 @@ public class WechatLoginController {
      * @throws IOException
      */
     @RequestMapping(value = "/wechatOauth2", method = { RequestMethod.GET, RequestMethod.POST })
-    public void author2Login(final HttpServletRequest request, final HttpServletResponse response, final Model model) throws IOException {
+    public void author2Login(final HttpServletRequest request, final HttpServletResponse response, final Model model)
+            throws IOException {
 
         final ShiroUser shiroUser = UserUtils.getPrincipal();
         if (shiroUser != null) { // 这种情况表明登陆正常
             // 检查当前用户
-            final CustWeChatDubboClientService wechatClientService = SpringContextHolder.getBean(CustWeChatDubboClientService.class);
+            final CustWeChatDubboClientService wechatClientService = SpringContextHolder
+                    .getBean(CustWeChatDubboClientService.class);
 
             final AccessToken at = shiroUser.getParam("accessToken");
             if (at == null) {
@@ -56,16 +59,15 @@ public class WechatLoginController {
                 logger.info("匿名用户登陆，去到开户页!");
 
                 final String status = custOpenAccountService.findOpenAccountStatus(openId);
-                if (BetterStringUtils.equals(status, "1")) {
+                if (StringUtils.equals(status, "1")) {
                     response.sendRedirect("wechat/index.html#/register/waitAudit");
-                } else if (BetterStringUtils.equals(status, "2")) {
+                } else if (StringUtils.equals(status, "2")) {
                     response.sendRedirect("wechat/index.html#/register/waitActive");
-                } else{
+                } else {
                     response.sendRedirect("wechat/index.html#/register/basic");
                 }
                 return;
-            }
-            else {
+            } else {
                 final CustOperatorInfo operator = UserUtils.getOperatorInfo();
                 if (operator != null) {
                     if (wechatClientService.checkFristLogin(operator.getId())) {
